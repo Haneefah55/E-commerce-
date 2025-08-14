@@ -57,7 +57,7 @@ export const signup = async(req, res) =>{
           cartItems: user.cartItems,
           role: user.role,
         }
-      })
+    })
     
   } catch (error) {
     console.error("Error in signup contoller", error.message);

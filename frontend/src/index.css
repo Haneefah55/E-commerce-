@@ -16,3 +16,8 @@
   font-display: swap;
 }
 
+.active {
+    
+  border-bottom: 3px solid #FF85BC;
+  padding-inline: 5px;
+}
