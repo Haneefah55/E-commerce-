@@ -1,7 +1,7 @@
 import { Link, NavLink } from 'react-router'
 import { Menu, ShoppingCart, X, LayoutDashboard, LogOut } from 'lucide-react'
 import React, { useState } from 'react'
-
+import { useAuthStore  } from '../store/userStore.js'
 import logo from '/images/logo3.png'
 
 const Navbar = () =>{
@@ -9,8 +9,9 @@ const Navbar = () =>{
   const[menuOpen, setMenuOpen ] = useState(false)
   const[isOpen, setIsOpen ] = useState(false)
   
-  const user = false
-  const admin = false
+  const { user } = useAuthStore()
+  
+  const admin = user?.role === "admin"
   
   const handelLogout = async() =>{
     console.log("User Logout Succeefully")
@@ -26,9 +27,9 @@ const Navbar = () =>{
       
       {/** Admin Dashboard**/}
       
-      { admin && <Link to="/dashboard" className="flex font-bold gap-2 items-center justify-center  text-gray-100">
-        <LayoutDashboard className="w-8 h-8"/>
-        <span className="hidden md:block text-2xl ">Dashboard</span>
+      { admin && <Link to="/dashboard" className="flex font-bold gap-2 items-center justify-center rounded-sm bg-gray-100 p-2 text-pink-600">
+        <LayoutDashboard className="w-5 h-5"/>
+        <span className=" text-md ">Dashboard</span>
       </Link>
       }
       
@@ -54,14 +55,14 @@ const Navbar = () =>{
             <Menu className=" md:hidden w-8 h-8" onClick={() => setMenuOpen(!menuOpen)}/>
           </button>
           
-          {user  ? (
+          {user  && !admin ? (
             <button 
               onClick={() => setIsOpen(!isOpen)}
               className="flex items-center justify-center ml-4 relative">
               <ShoppingCart className="w-8 h-8 text-gray-100 " />
               <span className="absolute bg-gray-100 p-2 top-1 -right-1.5 flex items-center justify-center text-pink-600 text-xs w-3 h-3 text-center rounded-full">3</span>
               
-            </button>) : (
+            </button>) : !user &&  (
             <Link to="/signup" className=" p-2 font-bold bg-gray-100 ml-6 rounded-md text-pink-600">
               Sign Up
             </Link>)}

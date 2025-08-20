@@ -23,12 +23,12 @@ const SignUpPage = () =>{
   }
   
   
-  const handleSignup = (e) =>{
+  const handleSignup = async(e) =>{
     e.preventDefault()
     
 
     try {
-      signup(name, email, password)
+      await signup(name, email, password)
       
       navigate("/account-created")
     } catch (error) {
@@ -54,7 +54,7 @@ const SignUpPage = () =>{
           </div>
           <div className="mt-10 flex flex-col items-center justify-center font-[Merienda] mt-5">
             <h3 className="text-2xl font-bold text-transparent bg-fuchsia-300 bg-clip-text text-center">Create Account</h3>
-            <div className="w-[330px] h-auto mt-5 p-3 flex flex-col items-center justify-center">
+            <div className="w-[330px] md:w-[400px]  h-auto mt-5 p-3 flex flex-col items-center justify-center">
               <form onSubmit={handleSignup}>
                 <div className="relative mb-5">
                   <div className=" absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none ">

@@ -70,7 +70,6 @@ export const signup = async(req, res) =>{
   
 }
 
-
 export const login = async(req, res) =>{
   
   const { email, password } = req.body
@@ -97,12 +96,42 @@ export const login = async(req, res) =>{
         email: user.email,
         cartItems: user.cartItems,
         role: user.role,
-        })
+    })
     } else {
       return res.status(401).json({ message: "Incorrect email or password"})
     }
   } catch (error) {
     console.error("Error in login contoller", error.message);
+    res.status(400).json({ 
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const profile = async(req, res) =>{
+  
+  
+  try {
+    
+  
+    const user = await User.findById(req.user._id)
+    
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+    }
+  
+    res.status(200).json({ 
+        
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      cartItems: user.cartItems,
+      role: user.role,
+    })
+    
+  } catch (error) {
+    console.error("Error in get profile contoller", error.message);
     res.status(400).json({ 
       success: false,
       message: error.message

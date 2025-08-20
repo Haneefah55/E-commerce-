@@ -1,5 +1,6 @@
+import { useAuthStore } from '../store/userStore.js'
 
-
+import { useNavigate } from 'react-router'
 import react, { useState } from 'react'
 import { Lock, Mail, EyeOff, Eye, Loader } from 'lucide-react'
 import { Link } from 'react-router'
@@ -8,11 +9,31 @@ const LoginPage = () =>{
   
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  //const [isLoading, setIsLoading] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const navigate = useNavigate()
+  
+  const { login, isLoading } = useAuthStore()
   
   const handleToggle = () =>{
     setIsVisible(!isVisible)
+  }
+  
+  
+  const handleLogin = async(e) =>{
+    e.preventDefault()
+    
+
+    try {
+      await login(email, password)
+      
+      navigate("/")
+    } catch (error) {
+      console.error(error);
+    }
+    
+    
+    
   }
   
   return(
@@ -29,8 +50,8 @@ const LoginPage = () =>{
           </div>
           <div className="mt-10 flex flex-col items-center justify-center font-[Merienda] mt-5">
             <h3 className="text-2xl font-bold text-transparent bg-fuchsia-300 bg-clip-text text-center">Welcome Back</h3>
-            <div className="w-[330px] h-auto mt-5 p-3 flex flex-col items-center justify-center">
-              <form>
+            <div className="w-[330px] md:w-[400px]  h-auto mt-5 p-3 flex flex-col items-center justify-center">
+              <form onSubmit={handleLogin}>
                 
                 
                 <div className="relative mb-5">
