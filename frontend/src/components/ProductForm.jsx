@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react'
-
+import { useProductStore } from '../store/productStore'
 
 
 const ProductForm = () =>{
@@ -10,9 +10,13 @@ const ProductForm = () =>{
   const [stock, setStock] = useState("")
   const [image, setImage] = useState("")
   const [category, setCategory] = useState("")
-  
+
+  //const isLoading = false
+
   const categories = ["cake", "cupcake", "doughnut", "yoghurt", "ice-cream", "chocolate", "macaron", "sweet & candy"]
   
+  const { createProduct, isLoading } = useProductStore()
+
   const handleImageUploade = (e) =>{
     const file = e.target.files[0]
     
@@ -27,11 +31,18 @@ const ProductForm = () =>{
     }
     
   }
+  const productData = {name, description, price, image, category, stock }
   
-  
-  const handleSubmit = (e) =>{
+  const handleSubmit = async(e) =>{
     e.preventDefault()
-    console.log('submitted')
+    
+
+    try {
+      await createProduct(productData)
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+    }
   }
   
   return(
@@ -111,7 +122,7 @@ const ProductForm = () =>{
             
           />
           <label htmlFor="image"
-            className="cursor-pointer px-3 py-2 border-2 rounded-md border-pink-400 text-gray-400  hover:border-none hover:bg-pink-600 hover:text-gray-100 font-semibold "
+            className="cursor-pointer px-3 py-2 border-2 rounded-md border-pink-400 text-gray-800  hover:border-none hover:bg-pink-600 hover:text-gray-100 font-semibold "
             >Upload Image</label>
             {image && <span>Image Uploaded</span>}
             
@@ -121,9 +132,10 @@ const ProductForm = () =>{
         
         <input
           type="submit"
-          className="cursor-pointer px-3 py-2 border-2 rounded-md border-pink-400 text-gray-400  hover:border-none hover:bg-pink-600 hover:text-gray-100 font-semibold "
-          value="Submit"
-        />
+          className="cursor-pointer px-3 py-2 border-2 rounded-md border-pink-400 text-gray-800  hover:border-none hover:bg-pink-600 hover:text-gray-100 font-semibold transform transition hover:scale-90 duration-200"
+          value={`${isLoading ? "Submitting..." : "Submit"}`}
+          disabled={isLoading}
+        />
         
       </form>
       

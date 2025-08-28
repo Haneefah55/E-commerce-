@@ -27,7 +27,7 @@ const Navbar = () =>{
       
       {/** Admin Dashboard**/}
       
-      { admin && <Link to="/dashboard" className="flex font-bold gap-2 items-center justify-center rounded-sm bg-gray-100 p-2 text-pink-600">
+      { admin && <Link to="/admin" className="flex font-bold gap-2 items-center justify-center rounded-sm bg-gray-100 p-2 text-pink-600">
         <LayoutDashboard className="w-5 h-5"/>
         <span className=" text-md ">Dashboard</span>
       </Link>

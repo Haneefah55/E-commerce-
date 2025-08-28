@@ -1,11 +1,12 @@
 import { PlusCircle, ShoppingBasket, BarChart, Settings } from 'lucide-react'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ProductForm from '../components/ProductForm.jsx'
 import ProductList from '../components/ProductList.jsx'
-
+import SettingsTab from '../components/SettingsTab.jsx'
 import AnalyticsTab from '../components/AnalyticsTab.jsx'
 
+import { useProductStore } from '../store/productStore.js'
 
 const AdminPage = () =>{
   const tabs = [
@@ -32,7 +33,22 @@ const AdminPage = () =>{
     
   ]
   
+  
   const [activeTab, setActiveTab ] = useState("add")
+
+  const { fetchAllProducts } = useProductStore()
+
+  useEffect(() => {
+
+    fetchAllProducts()
+  
+
+  }, [fetchAllProducts])
+
+
+
+
+  
   
   return(
   
@@ -54,10 +70,18 @@ const AdminPage = () =>{
         ))}
       </div>
       
-      <div className="max-w-[1200px] w-full bg-gray-900/10 flex items-center justify-center p-3">
-        {activeTab === "add" && <ProductForm />}
-        {activeTab === "product" && <ProductList />}
-        {activeTab === "analytics" && <AnalyticsTab />}
+      <div className="max-w-[1200px] w-full  flex items-center justify-center p-3">
+
+        <div>
+          {activeTab === "add" && <ProductForm />}
+          {activeTab === "product" && <ProductList />}
+          {activeTab === "analytics" && <AnalyticsTab />}
+          {activeTab === "settings" && <SettingsTab />}
+        </div>
+
+        
+      
+        
       </div>
       
       

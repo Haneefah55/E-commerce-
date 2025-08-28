@@ -6,8 +6,9 @@ export const getAllProducts = async(req, res) =>{
   
   try {
     const products = await Product.find({})
-    
-    res.json({ products })
+      //console.log(products)
+    res.json(products)
+  
   } catch (error) {
     console.error("Error in getAllProducts contoller", error.message);
     res.status(500).json({ message: error.message })
@@ -34,7 +35,7 @@ export const getFeaturedProducts = async(req, res) =>{
 export const createProduct = async(req, res) =>{
   
   try {
-    const { name, description, price, image, category } = req.body
+    const { name, description, price, image, category, stock } = req.body
   
     let cloudinaryResponse = null
     if(image){
@@ -47,8 +48,15 @@ export const createProduct = async(req, res) =>{
       description,
       price,
       image: cloudinaryResponse?.secure_url ? cloudinaryResponse.secure_url : "",
-      category
+      category,
+      stock
     })
+
+    console.log("Product Created Succeefully")
+
+    res.status(200).json({ product })
+
+    
     
   } catch (error) {
     console.error("Error in createProduct contoller", error.message);
@@ -140,7 +148,7 @@ export const toggleFeaturedProducts = async(req, res) =>{
     product.isFeatured = !product.isFeatured
     
     const updatedProduct = await product.save()
-    res.json({ updatedProduct })
+    res.json(updatedProduct)
     
   } catch (error) {
     console.error("Error in toggleFeaturedProducts contoller", error.message);

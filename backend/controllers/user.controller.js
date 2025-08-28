@@ -1,6 +1,6 @@
 import User from '../models/user.model.js'
-import { generateToken, storeRefreshToken, setCookies, delCookies, getStoredToken } from '../utils/generateToken.js'
-import bcrypt from 'bcryptjs'
+import { generateToken, setCookies, delCookies, getStoredToken } from '../utils/generateToken.js'
+
 
 
 export const signup = async(req, res) =>{
@@ -79,9 +79,10 @@ export const login = async(req, res) =>{
   
     if(user && (await user.comparePassword(password))) {
       
-      const { accessToken, refreshToken } = await generateToken(user._id)
       
-      await storeRefreshToken(user._id, refreshToken)
+      const { accessToken, refreshToken } = generateToken(user._id)
+      
+      //await storeRefreshToken(user._id, refreshToken)
       
       setCookies(res, accessToken, refreshToken)
   

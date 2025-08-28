@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { redis } from '../utils/redis.js'
+//import { redis } from '../utils/redis.js'
 
 export const generateToken = (userId) =>{
   
@@ -10,11 +10,11 @@ export const generateToken = (userId) =>{
   
   return { accessToken, refreshToken }
 }
-
+/*** 
 export const storeRefreshToken = async(userId, token) =>{
   await redis.set(`refreshToken: ${userId}`, token, "EX", 7 * 24 * 60 * 60)
 }
-
+**/
 export const setCookies = (res, accessToken, refreshToken) =>{
   
   res.cookie("access_token", accessToken, {
@@ -52,12 +52,13 @@ export const getStoredToken = async(req, res) =>{
     
   const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
   
-  const storedToken = await redis.get(`refreshToken: ${decoded.userId}`)
+  /** const storedToken = await redis.get(`refreshToken: ${decoded.userId}`)
   
   if(storedToken !== refreshToken){
     return res.status(400).json({ message: "Invalid refresh token" })
   }
-  
+  **/
+ 
   const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
   
   res.cookie("access_token", accessToken, {
