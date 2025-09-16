@@ -16,6 +16,7 @@ export const addToCart = async(req, res) =>{
     }
     
     await user.save()
+    console.log("produc added to cart", user.cartItems)
     res.json(user.cartItems)
     
   } catch (error) {
@@ -35,6 +36,7 @@ export const RemoveFromCart = async(req, res) =>{
       user.cartItems = user.cartItems.filter((item) => item.id !== productId)
     }
     await user.save()
+    console.log("product removed from cart")
     res.json(user.cartItems)
   } catch (error) {
     console.error("Error in RemoveFromCart contoller", error.message);
@@ -62,6 +64,8 @@ export const updateQuantity = async(req, res) =>{
     } else {
       res.json({ message: "Product not found" })
     }
+
+    console.log("product updated")
   } catch (error) {
     console.error("Error in updateQuantity contoller", error.message);
     res.status(500).json({ message: error.message })

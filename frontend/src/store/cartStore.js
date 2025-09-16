@@ -1,0 +1,106 @@
+import { toast } from 'react-hot-toast'
+import { create } from 'zustand'
+import axios from 'axios'
+
+
+axios.defaults.withCredentials = true
+
+export const useCartStore = create((set, get) => ({
+
+  cart: [],
+  coupon: null,
+  total: 0,
+  subtotal: 0,
+  isCouponApplied: false,
+
+  getCartItems: async() =>{
+
+    try {
+      const response = await axios.get('/api/cart')
+
+      set({ cart: response.data })
+    } catch (error) {
+      console.log(error)
+      //toast.error(error.message)
+    }
+  },
+
+  addToCart: async(product) =>{
+
+    try {
+      const response = await axios.post('/api/cart', { productId: product._id })
+
+      toast.success("product added to  cart")
+
+      set((prevState) => {
+        const existingItem = prevState.cart.find((item) => item._id === product._id)
+
+        const newCart = existingItem ? prevState.cart.map((item) => item._id === product._id ) 
+          ? { ...item, quantity: item.quantity + 1 } : item
+          : [...prevState.cart, { ...product, quantity: 1 }]
+
+        return { cart: newCart }
+      })
+
+      get().calculateTotals()
+
+    } catch (error) {
+      
+    }
+  },
+
+  removeFromCart: async(productId) =>{
+    const res = await axios.delete('/api/cart', { data: { productId } })
+
+    set((prevState) => ({ cart: prevState.cart.filter((item) => item._id !== productId) }))
+    get().calculateTotals()
+  },
+
+  updateQuantity: async(productId, quantity) =>{
+
+    if(quantity === 0){
+      get().removeFromCart(productId)
+      return
+    }
+
+    const res = await axios.put(`/api/cart/${productId}`, { quantity })
+
+    set((prevState) => ({
+      cart: prevState.cart.map((item) => (item._id === productId ? { ...item, quantity } : item))
+    }))
+
+    get().calculateTotals()
+  },
+
+  calculateTotals: () =>{
+
+     const { cart, coupon } = get()
+     const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+
+     let total = subtotal
+
+     if(coupon) {
+      const discount = subtotal * (coupon.discountPercent / 100)
+      total = subtotal - discount
+     }
+
+     set({ subtotal, total })
+     console.log("totals calcuclated")
+  },
+
+  createCoupon: async() =>{
+
+    const { subtotal } = get()
+    try {
+      if(subtotal > 50000){
+      const response = await axios.post('/api/coupon')
+      set({ coupon: response.data})
+      } else {
+        return
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+}))

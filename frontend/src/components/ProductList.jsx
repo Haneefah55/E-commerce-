@@ -1,26 +1,28 @@
 
 import { PenIcon, PenSquareIcon, Star, Trash, Trash2Icon, TrashIcon } from 'lucide-react'
 import React, { useEffect } from 'react'
+import { Link } from 'react-router'
 
 import { useProductStore } from '../store/productStore.js'
 
 const ProductList = () =>{
-  const { fecthAllProducts, isLoading,  toggleFeaturedProducts, deleteProduct } = useProductStore()
-  const products = useProductStore((state) => state.products)
+  const { toggleFeaturedProducts, deleteProduct, products, fetchAllProducts } = useProductStore()
+  
 
-
-  const handleEdit = async() =>{
-    console.log("edited")
-  }
-
+  useEffect(() => {
+  
+      fetchAllProducts()
+    
+  
+    }, [fetchAllProducts])
   
   
   return(
   
-    <div className="w-full h-screen font-[Merienda] relative overflow-x-auto [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-pink-200 [&::-webkit-scrollbar-thumb]:bg-pink-700 ">
+    <div className="w-full h-screen self-center font-[Merienda] relative  overflow-x-auto">
 
-      <table  className="min-w-full divide-y divide-pink-900 ">
-        <thead className="bg-pink-600 text-nowrap">
+      <table  className=" table-auto border-spacing-x-1 sm:w-[500px] md:w-full divide-y divide-pink-900 ">
+        <thead className="bg-pink-600 text-nowrap ">
           <tr>
             <th scope='col' className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase ">
               Product
@@ -54,7 +56,7 @@ const ProductList = () =>{
           {
             products?.map((product) =>(
               <tr key={product._id} className=" even:bg-pink-200 font-semibold   odd:bg-transparent hover:bg-pink-200 text-sm text-pink-800">
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 text-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
                       <img
@@ -114,15 +116,15 @@ const ProductList = () =>{
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className='flex gap-2 items-center'>
                     <button className='hover:text-pink-500'
-                      onClick={() => deleteProduct(product?._id)}
+                      onClick={() => deleteProduct(product._id)}
                     
                     >
                       <Trash2Icon className='w-5 h-5' />
 
                     </button>
-                    <button className='hover:text-pink-500' onClick={handleEdit}>
+                    <Link to={`/edit-product/${product._id}`} className='hover:text-pink-500'>
                       <PenSquareIcon className='w-5 h-5'/>
-                    </button>
+                    </Link>
                   </div>
 
                 </td>

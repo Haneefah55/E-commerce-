@@ -33,16 +33,17 @@ export const setCookies = (res, accessToken, refreshToken) =>{
   
 
 }
-
+/** 
 export const delCookies = async(req) =>{
   
   const refreshToken = req.cookies.refresh_token
     if(refreshToken){
       const decode = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
-      await redis.del(`refreshToken: ${decode.userId}`)
+
+      //await redis.del(`refreshToken: ${decode.userId}`)
     }
 } 
-
+**/
 export const getStoredToken = async(req, res) =>{
   const refreshToken = req.cookies.refresh_token
   

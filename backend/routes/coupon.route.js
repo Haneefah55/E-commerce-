@@ -7,8 +7,9 @@ import { protectRoute, adminRoute } from '../middleware/auth.middleware.js'
 const router = express.Router()
 
 router.get("/", protectRoute, getCoupon)
-router.post("/validate", protectRoute,  validateCoupon)
 router.post("/", protectRoute, createCoupon)
+router.post("/validate", protectRoute,  validateCoupon)
+
 
 
 

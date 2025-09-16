@@ -52,7 +52,7 @@ const SignUpPage = () =>{
             <img src={logo} alt="logo" className="w-[120px]" />
             
           </div>
-          <div className="mt-10 flex flex-col items-center justify-center font-[Merienda] mt-5">
+          <div className="mt-10 flex flex-col items-center justify-center font-[Merienda] ">
             <h3 className="text-2xl font-bold text-transparent bg-fuchsia-300 bg-clip-text text-center">Create Account</h3>
             <div className="w-[330px] md:w-[400px]  h-auto mt-5 p-3 flex flex-col items-center justify-center">
               <form onSubmit={handleSignup}>

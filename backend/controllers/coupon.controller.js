@@ -54,20 +54,25 @@ export const validateCoupon = async(req, res) =>{e
 
 export const createCoupon = async(req, res)=>{
   try {
-    const { amount } = req.body
+  
     
     const randomCode = generateRandomCode()
+
     
-    
-  
     const newCoupon = await Coupon.create({
       code: randomCode,
       discountPercent: 10,
       expire: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
       user: req.user._id
     })
+
     console.log(newCoupon)
     res.json(newCoupon)
+    
+    
+    
+  
+    
   
     
   } catch (error) {

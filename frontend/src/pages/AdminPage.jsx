@@ -34,7 +34,7 @@ const AdminPage = () =>{
   ]
   
   
-  const [activeTab, setActiveTab ] = useState("add")
+  const [activeTab, setActiveTab ] = useState("product")
 
   const { fetchAllProducts } = useProductStore()
 
@@ -52,7 +52,7 @@ const AdminPage = () =>{
   
   return(
   
-    <div className=" relative flex  bg-pink-100 px-4 pt-10 flex-col w-screen items-center justify-center">
+    <div className=" relative flex overflow-x-auto bg-pink-100 px-4 pt-10 flex-col w-screen items-center justify-center">
       
       <div className="bg-pink-700 bg-clip-text text-transparent fontbold mt-16 text-3xl font-bello">
         Admin Dashboard
@@ -70,7 +70,7 @@ const AdminPage = () =>{
         ))}
       </div>
       
-      <div className="max-w-[1200px] w-full  flex items-center justify-center p-3">
+      <div className="max-w-[1200px] w-full overflow-x-auto [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-pink-200 [&::-webkit-scrollbar-thumb]:bg-pink-700   flex md:justify-center md:items-center p-3">
 
         <div>
           {activeTab === "add" && <ProductForm />}

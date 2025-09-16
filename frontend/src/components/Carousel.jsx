@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import img1 from '/images/slide1.jpg'
 import img2 from '/images/slide2.jpg'
 import img3 from '/images/slide3.jpg'
@@ -55,13 +56,15 @@ const Carousel = () =>{
       <div className=" w-full h-full bg-center bg-cover duration-500"
         style={{ backgroundImage: `url(${slides[currentIndex].url})`}}
       >
-        <div className="absolute inset-0 bg-black/30 flex mt-10 flex-col items-center justify-center">
+        <div className="absolute font-[Merienda] inset-0 bg-black/50 flex mt-10 flex-col items-center justify-center">
             
-          <img src={welcome} alt="welcome to treats" className="w-[200px] md:w-[350px]"/>
+          <img src={welcome} alt="welcome to treats" className="w-[200px] "/>
             
-          <p className="font-[Merienda] text-md mt-5 text-gray-100 md:text-xl font-semibold">
-              Where Sweet Dreams Comes To Life!
+          <p className=" text-md mt-5 text-center text-gray-100 ">
+              Unconventional Treats, Unforgetable Flavours.<br /> Your Happy Place Awaits!
           </p>
+
+          <Link to={'/shop'} className='bg-pink-600 text-white transition-colors hover:bg-transparent hover:border-white hover:border-2 p-3 hover:text-white transition-transform hover:translate-x-3 rounded-md  mt-4 '>Shop Now</Link>
             
             
         </div>

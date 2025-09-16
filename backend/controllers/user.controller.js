@@ -1,5 +1,5 @@
 import User from '../models/user.model.js'
-import { generateToken, setCookies, delCookies, getStoredToken } from '../utils/generateToken.js'
+import { generateToken, setCookies, getStoredToken } from '../utils/generateToken.js'
 
 
 
@@ -37,9 +37,9 @@ export const signup = async(req, res) =>{
     const user = await User.create({ name, email, password })
     
     //authenicate user
-    const { accessToken, refreshToken } = await generateToken(user._id)
+    const { accessToken, refreshToken } = generateToken(user._id)
     
-   await storeRefreshToken(user._id, refreshToken)
+   //await storeRefreshToken(user._id, refreshToken)
    
    setCookies(res, accessToken, refreshToken)
   
@@ -50,13 +50,7 @@ export const signup = async(req, res) =>{
     res.status(200).json({ 
         success: true,
         message: "User created successfully",
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          cartItems: user.cartItems,
-          role: user.role,
-        }
+       
     })
     
   } catch (error) {
@@ -97,6 +91,7 @@ export const login = async(req, res) =>{
         email: user.email,
         cartItems: user.cartItems,
         role: user.role,
+        wishlist: user.wishlist,
     })
     } else {
       return res.status(401).json({ message: "Incorrect email or password"})
@@ -116,20 +111,13 @@ export const profile = async(req, res) =>{
   try {
     
   
-    const user = await User.findById(req.user._id)
+    const user = await User.findById(req.user._id).select("-password")
     
     if(!user){
       return res.status(404).json({ message: "User not found" })
     }
   
-    res.status(200).json({ 
-        
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      cartItems: user.cartItems,
-      role: user.role,
-    })
+    res.status(200).json(user)
     
   } catch (error) {
     console.error("Error in get profile contoller", error.message);
@@ -142,7 +130,7 @@ export const profile = async(req, res) =>{
 
 export const logout = async(req, res) =>{
   try {
-    await delCookies(req)
+    //await delCookies(req)
     
     res.clearCookie("access_token")
     res.clearCookie("refresh_token")

@@ -10,6 +10,11 @@ export const useAuthStore = create((set, get) =>({
   user: null,
   isLoading: false,
   checkingAuth: true,
+  wishlist: [],
+  
+
+
+  setUser: (user) => set({ user }),
   
   signup: async(name, email, password) =>{
     set({ isLoading: true })
@@ -18,7 +23,7 @@ export const useAuthStore = create((set, get) =>({
       const response = await axios.post("/api/auth/signup", { name, email, password })
     
       
-      set({ user: response.data.user, isLoading: false })
+      set({ isLoading: false })
   
       console.log("Account created successfully")
       toast.success("Account created successfully")
@@ -43,6 +48,8 @@ export const useAuthStore = create((set, get) =>({
   
       console.log("User login successfully")
       toast.success("User login successfully")
+
+      
     } catch (error) {
       set({ isLoading: false })
     
@@ -57,6 +64,7 @@ export const useAuthStore = create((set, get) =>({
     
     try {
       const response = await axios.get('/api/auth/profile')
+      //console.log(response.data)
       
       set({ user: response.data, checkingAuth: false })
     } catch (error) {
@@ -64,7 +72,68 @@ export const useAuthStore = create((set, get) =>({
       set({ user: null, checkingAuth: false })
         
     }
+  },
+
+  getWishlist: async() =>{
+    try {
+      const res = await axios.get('/api/product/wishlist')
+      //console.log("list from server", res.data)
+
+      set({ wishlist: res.data })
+    } catch (error) {
+      console.log(error)
+    }
+
+  },
+
+  toggleWishlist: async(id) =>{
+  
+    try {
+
+      const { user } = get()
+      if(!user) {
+        throw new Error("please login to add to wishlist");
+        
+      }
+      
+      const response = await axios.patch(`/api/product/wishlist/${id}`)
+
+      console.log("response", response.data)
+
+      set({ wishlist: response.data })
+
+
+      const { wishlist } = get()
+
+      if(wishlist?.some((item) => item._id === id)){
+        toast.success("product added to wishlist")
+      } else {
+        toast.success("product removed from wishlist")
+      }
+
+
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message )
+    }
+  
+  },
+
+
+  logout: async() =>{
+    try {
+      const response = await axios.post("/api/auth/logout")
+      set({ user: null })
+      toast.success('user logout successfully')
+    } catch (error) {
+      console.log(error)
+    }
   }
+
+
+
+  
+
   
   
   
