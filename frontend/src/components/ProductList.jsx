@@ -1,12 +1,12 @@
 
-import { PenIcon, PenSquareIcon, Star, Trash, Trash2Icon, TrashIcon } from 'lucide-react'
+import { BadgeCheck, PenSquareIcon, Star, Trash2Icon } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router'
 
 import { useProductStore } from '../store/productStore.js'
 
 const ProductList = () =>{
-  const { toggleFeaturedProducts, deleteProduct, products, fetchAllProducts } = useProductStore()
+  const { toggleFeaturedProducts, deleteProduct, products, fetchAllProducts, toggleOfferProducts } = useProductStore()
   
 
   useEffect(() => {
@@ -42,6 +42,10 @@ const ProductList = () =>{
 
             <th scope='col' className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase ">
               Featured
+            </th>
+
+            <th scope='col' className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase ">
+              Offer
             </th>
 
             <th scope='col' className="px-6 py-3 text-left text-xs font-medium text-gray-100 uppercase">
@@ -107,6 +111,23 @@ const ProductList = () =>{
 
 
                     <Star className='h-5 w-5'/>
+                    
+
+                  </button>
+
+                </td>
+
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button className={`p-1 rounded-full ${product.isOffer ? 
+                    "bg-yellow-500 text-gray-900"  
+                    : "bg-gray-400 text-gray-300"  } hover:bg-yellow-400 transition-colors duration-200 `}
+                    
+                    onClick={() => toggleOfferProducts(product._id)}
+                  
+                  >
+
+
+                    <BadgeCheck className='h-5 w-5'/>
                     
 
                   </button>

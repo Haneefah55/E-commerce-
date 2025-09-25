@@ -2,20 +2,22 @@ import React, { useEffect, useState } from 'react'
 import { useCartStore } from '../store/cartStore.js'
 import { useAuthStore } from '../store/userStore.js'
 import toast from 'react-hot-toast'
-import { ShoppingCart, Heart, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react'
 
-const FeaturedProducts = ({ featuredProducts }) => {
+const TopDealItems = ({ offerProducts }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(3)
   const [itemWidth, setItemsWidth] = useState(100 / 3)
 
-  const { user, toggleWishlist, wishlist } = useAuthStore()
+  const { user } = useAuthStore()
 
   const { addToCart } = useCartStore()
 
+  const discount = 20
 
 
-  const onWishlist = wishlist?.some((item) => item._id === featuredProducts._id)
+
+
 
   const handleAddToCart = async(product) =>{
     if(!user){
@@ -29,7 +31,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
   }
 
   const next = () =>{
-    if(currentIndex < featuredProducts.length - itemsPerPage){
+    if(currentIndex < offerProducts.length - itemsPerPage){
       setCurrentIndex((prevIndex) => prevIndex + 1)
     }
   }
@@ -41,7 +43,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
   }
 
   const isStartDisabled = currentIndex === 0
-  const isEndDisabled = currentIndex >= featuredProducts.length - itemsPerPage
+  const isEndDisabled = currentIndex >= offerProducts?.length - itemsPerPage
  
 
   useEffect(() => {
@@ -78,19 +80,20 @@ const FeaturedProducts = ({ featuredProducts }) => {
   
     <div className='py-12 w-full max-w-4xl mx-auto'>
       <div className=' container px-4  '>
-        <h3 className="p-2 text-purple-800 ml-2 font-[Merienda] font-semibold text-xl">Featured Products</h3>
-        <div className='w-[280px] h-1 mb-3 bg-pink-800 flex' />
+        <h3 className="p-2 text-purple-800 ml-2 font-[Merienda] font-semibold text-md md:text-xl ">Top deals of the month</h3>
+        <div className='w-[280px] h-1 mb-5 bg-pink-800 flex' />
         <div className='relative'>
           <div className='overflow-hidden mx-auto'>
             <div className='flex gap-6 transition-transform duration-300 ease-in-out'
               style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
             
             >
-              {featuredProducts.map((product) =>(
+              {offerProducts?.map((product) =>(
+                
             
                 <div  className='w-[270px] h-[350px] flex-shrink-0 relative group  flex flex-col overflow-hidden transition-all cursor-pointer rounded-2xl'
                   key={product._id} 
-                
+                  /**style={{ width: `${itemWidth}%`}} **/
                 >
                   <div className="w-full h-[250px] cursor-pointer rounded-2xl relative">
                     <img src={product?.image}
@@ -111,20 +114,15 @@ const FeaturedProducts = ({ featuredProducts }) => {
 
                   <div className=" font-[Merienda] text-sm font-semibold flex flex-col p-2 text-nowrap text-fuchsia-900 items-center">
                   <p>{product?.name}</p>
-                  <p className='text-xs mt-2'>&#8358; {product?.price?.toFixed(2)}</p>
+                  <s className='text-xs mt-2'>&#8358; {product?.price?.toFixed(2)}</s>
+                  <p className='text-xs mt-2'>&#8358; {product?.discountedPrice?.toFixed(2)}</p>
                     
                   </div>
-                  <button className='absolute top-3 right-4 bg-white rounded-full p-2' 
-                    onClick={() => toggleWishlist(product?._id)}
-                    
-                  >
 
-                    {onWishlist ? (<Heart fill='#db2777' strokeWidth={0}/>) : ( <Heart className='text-pink-500'/>)
-
-                    }
-                    
-
-                  </button>
+                  <div className='absolute top-3 right-4 bg-white text-pink-800 font-semibold font-[Merienda] rounded-full p-2'>
+                    -{discount}%
+                  </div>
+                  
                   
                 </div>
           
@@ -159,4 +157,4 @@ const FeaturedProducts = ({ featuredProducts }) => {
   )
 }
 
-export default FeaturedProducts
+export default TopDealItems

@@ -9,30 +9,29 @@ import { useProductStore } from '../store/productStore.js'
 
 const CartPage = () => {
 
-  const { cart, calculateTotals } = useCartStore()
-  const { fetchRecommendedProducts, recommendedProducts } = useProductStore()
+  const { cart, calculateTotals, getCoupon } = useCartStore()
+  const { fetchRecommendedProducts } = useProductStore()
 
   //console.log("recommend", recommendedProducts)
 
 
   useEffect(() => {
     
-    calculateTotals()
-
-  }, [calculateTotals])
-
+    fetchRecommendedProducts()
+  }, [fetchRecommendedProducts])
 
 
   useEffect(() => {
-    
-    fetchRecommendedProducts()
-  }, [fetchRecommendedProducts])
+
+    getCoupon()
+
+  }, [getCoupon])
   
   
 
 
   return (
-    <div className='bg-pink-100 w-full min-h-screen pt-14 px-3 md:px-6 '>
+    <div className='bg-pink-100 w-full min-h-screen pt-14 px-1 md:px-6 '>
       <h2 className='font-semibold font-bello text-2xl text-pink-600 mb-10 mt-10 text-center'>My Cart</h2>
 
       { cart.length === 0 
@@ -52,8 +51,8 @@ const CartPage = () => {
               </div>
             </div>
 
-            <div className='mt-8 px-20 w-full justify-items-center'>
-              <RecommendedProducts recommendedProducts={recommendedProducts} />
+            <div className='mt-8 px-6 md:px-20 w-full flex items-center justify-center '>
+              <RecommendedProducts />
             </div>
 
             
@@ -76,7 +75,7 @@ export default CartPage
 
 const EmptyCartUI = () => (
 
-  <div className='flex flex-col font-[Merienda] items-center justify-center space-y-4 py-16'>
+  <div className='flex flex-col font-[Merienda] items-center justify-center space-y-4 py-16 px-10'>
 
     <ShoppingCart className='w-24 h-24 text-pink-500' />
     <h3 className='text-2xl font-semibold text-pink-800'>Your Cart is Empty!</h3>

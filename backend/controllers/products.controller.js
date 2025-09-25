@@ -4,6 +4,7 @@ import User from '../models/user.model.js'
 import cloudinary from '../utils/cloudinary.js'
 
 
+
 export const getAllProducts = async(req, res) =>{
   
   try {
@@ -50,6 +51,33 @@ export const getFeaturedProducts = async(req, res) =>{
   
 }
 
+
+export const getOfferProducts = async(req, res) =>{
+  try {
+    const offerProduct = await Product.find({ isOffer: true })
+    if(!offerProduct){
+      return res.status(404).json({ message: "No offer Products found" })
+    }
+
+    const discount = 20
+
+    const discountedProducts = offerProduct.map((product) => {
+      const discountedPrice = product.price * (1 - discount / 100)
+
+      return {
+        ...product._doc,
+        discountedPrice: discountedPrice,
+
+      }
+    })
+  
+    res.json(discountedProducts)
+  } catch (error) {
+    console.error("Error in getOfferProducts contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
+  
+}
 export const createProduct = async(req, res) =>{
   
   try {
@@ -178,6 +206,28 @@ export const toggleFeaturedProducts = async(req, res) =>{
     
   } catch (error) {
     console.error("Error in toggleFeaturedProducts contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export const toggleOfferProducts = async(req, res) =>{
+  
+  try {
+    const { id } = req.params
+    
+    const product = await Product.findById(id)
+    if(!product){
+      return res.status(404).json({ message: "Products not found" })
+    }
+    
+    
+    product.isOffer = !product.isOffer
+    
+    const updatedProduct = await product.save()
+    res.json(updatedProduct)
+    
+  } catch (error) {
+    console.error("Error in toggleOfferProducts contoller", error.message);
     res.status(500).json({ message: error.message })
   }
 }
@@ -312,5 +362,7 @@ export const updateProduct = async(req, res) =>{
     res.status(500).json({ message: error.message })
   }
 }
+
+
 
 

@@ -46,11 +46,20 @@ const userSchema = new mongoose.Schema({
 
   ],
 
+  shippingAddress: {
+    street: { type: String, required: true },
+    city:    { type: String, required: true },
+    state:   { type: String, require: true, },
+    phoneNo: { type: Number },
+    zipCode: { type: String },
+  },
+
   role: {
     type: String,
     enum: ["customer", "admin"],
     default: "customer"
   },
+
 }, { timestamps: true })
 
 

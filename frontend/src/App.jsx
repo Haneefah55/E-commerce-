@@ -18,6 +18,10 @@ import CategoryPage from './pages/CategoryPage.jsx'
 import { useCartStore } from './store/cartStore.js'
 import CartPage from './pages/CartPage.jsx'
 import Footer from './components/Footer.jsx'
+import CheckoutPage from './pages/CheckoutPage.jsx'
+import PaymentPage from './pages/PaymentPage.jsx'
+import PaymentSuccess from './pages/PaymentSuccess.jsx'
+import PaymentFailed from './pages/PaymentFailed.jsx'
 
 
 const RedirectAuthenticatedUser = ({ children }) =>{
@@ -39,7 +43,7 @@ const App = () => {
   
   
   const pathname= useLocation().pathname
-  const matchPaths = ['/signup', '/login', '/account-created' ];
+  const matchPaths = ['/signup', '/login', '/account-created', '/purchase-success', '/purchase-failed' ];
 
   const isMatch = matchPaths.some(path => pathname.includes(path));
   //console.log(wishlist)
@@ -53,15 +57,22 @@ const App = () => {
   }, [checkAuth])
 
   useEffect(() => {
-    getCartItems()
+    if(user){
+      getCartItems()
+    }
+    
 
-  }, [getCartItems])
+  }, [user])
 
   useEffect(() => {
+   
+
+    if(user){
     getWishlist()
+    }
 
     
-  }, [getWishlist])
+  }, [user])
   
   
   if(checkingAuth) return <Loader />
@@ -88,7 +99,7 @@ const App = () => {
         } />
         
         
-        <Route path="/account-created" element={<AccountCreatedPage />} />
+        <Route path="/account-created" element={ user ? <AccountCreatedPage /> : <Navigate to={'/login'} replace />} />
         
         <Route path="*" element={<NotFoundPage />} />
 
@@ -97,6 +108,10 @@ const App = () => {
         <Route path="/shop" element={<ShopPage />} />
 
         <Route path="/user/cart" element={ user ? <CartPage /> : <Navigate to={'/login'} replace />} />
+        <Route path="/checkout-page" element={ user ? <CheckoutPage /> : <Navigate to={'/login'} replace />} />
+        <Route path="/payment" element={ user ? <PaymentPage /> : <Navigate to={'/login'} replace />} />
+        <Route path="/purchase-success/:id" element={ user ? <PaymentSuccess /> : <Navigate to={'/login'} replace />} />
+        <Route path="/purchase-failed" element={ user ? <PaymentFailed /> : <Navigate to={'/login'} replace />} />
 
         <Route path="/edit-product/:id" element={ user?.role === "admin" ? <EditProduct /> : <Navigate to={'/login'} replace />}  />
 

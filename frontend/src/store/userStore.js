@@ -2,16 +2,19 @@ import { toast } from 'react-hot-toast'
 import { create } from 'zustand'
 import axios from 'axios'
 
+
 axios.defaults.withCredentials = true
 
 //const API_URL= import.meta.env.MODE === "development" ? "/api" : "/api"
+
 
 export const useAuthStore = create((set, get) =>({
   user: null,
   isLoading: false,
   checkingAuth: true,
   wishlist: [],
-  
+  shippingAddress: {},
+  order: [],
 
 
   setUser: (user) => set({ user }),
@@ -50,6 +53,8 @@ export const useAuthStore = create((set, get) =>({
       toast.success("User login successfully")
 
       
+
+      
     } catch (error) {
       set({ isLoading: false })
     
@@ -57,6 +62,31 @@ export const useAuthStore = create((set, get) =>({
       toast.error(error.response?.data?.message || error.message || "Error logining in user")
       throw error
     }
+  },
+
+  changePassword: async(oldPassword, newPassword) =>{
+
+    set({ isLoading: true})
+
+    try {
+      const response = await axios.post("/api/auth/change-password", { oldPassword, newPassword })
+
+      set({ isLoading: false })
+      //console.log(response)
+
+      const msg = response.data.message
+      toast.success(msg)
+    } catch (error) {
+
+      set({ isLoading: false })
+    
+      console.log(error)
+      toast.error(error.response?.data?.message || error.message || "Error changing user password")
+      throw error
+      
+      
+    }
+
   },
   
   checkAuth: async() =>{
@@ -118,6 +148,40 @@ export const useAuthStore = create((set, get) =>({
     }
   
   },
+
+  addShippingAddress: async(address) =>{
+
+    const { user } = get()
+
+    try {
+      const response = await axios.patch('/api/auth/address', { address })
+      console.log(response.data)
+
+      set({ user: {...user, shippingAddress: response.data.shippingAddress }
+          
+      })
+
+      toast.success("shipping address added successfully")
+    } catch (error) {
+      
+      console.log(error)
+      toast.error(error.message || "error adding shipping address")
+    }
+
+  },
+
+  fetchShippingAddress: async() =>{
+
+    try {
+      const response = await axios.get('/api/auth/address')
+      console.log(response.data)
+      set({ shippingAddress: response.data.shippingAddress })
+    } catch (error) {
+      
+    }
+
+  },
+
 
 
   logout: async() =>{

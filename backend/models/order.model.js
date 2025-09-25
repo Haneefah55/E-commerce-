@@ -9,6 +9,13 @@ const orderSchema = new mongoose.Schema({
     required: true,
     
   },
+  deliveryDate: {
+    type: Date,
+    required: true,
+  },
+  paymentRef: String,
+  
+  
   products: [
     
     {

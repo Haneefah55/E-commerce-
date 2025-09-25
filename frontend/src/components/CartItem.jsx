@@ -9,7 +9,7 @@ const CartItem = ({ item }) => {
 
   return (
     
-    <div className='mx-auto bg-white border-2 h-auto p-5 rounded-lg shadow-sm flex flex-col md:flex-row items-center mb-4  font-[Merienda]'>
+    <div className='mx-auto bg-white min-w-[280px] border-2 h-auto p-5 rounded-lg shadow-sm flex flex-col md:flex-row items-center mb-4  font-[Merienda]'>
       <div className='flex  justify-center gap-3 flex-col md:flex-row'>
         <img className='w-[180px] h-[150px]  object-cover rounded-md'
           src={item.image}

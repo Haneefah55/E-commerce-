@@ -1,4 +1,6 @@
 import Product from '../models/products.model.js'
+import User from '../models/user.model.js'
+
 
 
 export const addToCart = async(req, res) =>{
@@ -89,4 +91,21 @@ export const getCart = async(req, res) =>{
     res.status(500).json({ message: error.message })
   }
 
+}
+
+export const clearCart = async(req, res) =>{
+  try {
+    const user = await User.findById(req.user._id)
+
+    user.cartItems = []
+
+    await user.save()
+    console.log("cart items deleted successfully")
+    res.json({ message: "cart items deleted successfully" })
+
+
+  } catch (error) {
+    console.error("Error in clearCart contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
 }

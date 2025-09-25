@@ -1,74 +1,142 @@
 import paystack from '../utils/paystack.js'
 import Coupon from '../models/coupon.model.js'
 import Order from '../models/order.model.js'
+import Product from '../models/products.model.js'
+import axios from 'axios'
+import { configDotenv } from 'dotenv'
+
+configDotenv()
+
+
+axios.defaults.withCredentials = true
+
+function generateRandomCode(length = 10) {
+    const characters = '0123456789';
+    let result = '';
+    
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters.charAt(randomIndex);
+    }
+    
+    return result;
+}
 
 export const initializePayment = async(req, res) =>{
   
   try {
-    const { email, amount, coupon, products } = req.body
-    if(!Array.isArray(products) || products.length === 0) {
-      return res.status(400).json({ error: "Invalid or empty product array "})
-    }
+    const { amount, coupon } = req.body
+
+    const user = req.user
+
+    const total = amount * 100
+
+    const randomCode = generateRandomCode()
+    
+
+
+    console.log(user.email)
+    console.log(total)
+    console.log(coupon)
+    console.log(randomCode)
+
+    
+
     const response = await paystack.transaction.initialize({ 
-      email,
-      amount: amount * 100,
+      email: user.email,
+      amount: total,
       metadata: {
-        userId: req.user._id.toString(),
-        couponCode: coupon,
-        products: JSON.stringify(
-          products.map((p) => ({
-            id: p._id,
-            quantity: p.quantity,
-            price: p.price,
-          }))
-        ),
-        totalAmount: amount,
+        totalAmount: total,
+        orderId: randomCode,
+        coupon: coupon,
         
       },
-      callback_url: process.env.CLIENT_URL_SUCCESS,
     })
-    
+
+
+
     console.log(response.data)
     res.json(response.data)
   } catch (error) {
     console.error("Error in initializePayment contoller", error.message);
     res.status(500).json({ message: error.message })
-  }e
+  }
 }
   
 export const verifyPayment = async(req, res) =>{
+
     
   try {
+
+    const user = req.user
+    const cart = user.cartItems
     
-    const reference = req.params.reference
+    const { reference } = req.params
+
+    if(!reference) {
+      console.log("no reference")
+      res.json({ message: "no reference"})
+    }
     
-    console.log(reference)
-    const response = await paystack.transaction.verify({ reference })
-    if(response.data.status === "success") {
-      const metadata = response.data.metadata
+    console.log("ref", reference)
+    console.log("secret ket", process.env.PAYSTACK_SECRET_KEY)
+
+    const response = await axios.get(
+      `https://api.paystack.co/transaction/verify/${reference}`,
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+        },
+        timeout: 15000, // 15 second timeout
+      }
+    );
+
+    console.log("verify response", response.data)
+    console.log("status text", response.statusText)
+
+
+    const products = await Product.find({ _id: {$in: req.user.cartItems } })
+    
+    const cartItems = products.map((product) =>{
+      const item = user.cartItems.find((cartItem) => cartItem.id === product.id)
       
-      console.log(metadata)
+      return { ...product.toJSON(), quantity: item.quantity }
+    })
+
+    if(response.statusText === 'OK') {
+      const metadata = response.data.data.metadata
+      
+      console.log("metadata", metadata)
       //delete coupon code
-      await Coupon.findOneAndUpdate({ code: metadata.couponCode, user: metadata.userId }, { isActive: false })
+      await Coupon.findOneAndUpdate({ code: metadata.coupon, user: metadata.userId }, { isActive: false })
+      console.log("coupon deleted")
       
       // create a new order
-      const products = JSON.parse(metadata.products);
+      console.log("cart items", cartItems)
+
+
       const newOrder = new Order({
-        user: metadata.userId,
-        products: products.map((product) =>({
-          product: product.id,
+        user: user._id,
+        products: cartItems.map((product) =>({
+          product: product._id,
           quantity: product.quantity,
           price: product.price,
         })),
-        totalAmount: metadata.amount,
+        paymentRef: response.data.data.reference,
+        totalAmount: metadata.totalAmount,
+        deliveryDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+        
         
       })
       
       await newOrder.save()
+      console.log("new order", newOrder)
       res.status(200).json({
         success: true,
         message: "Payment successful, order created",
         orderId: newOrder._id,
+        
+        
       })
     } else {
       res.status(200).json({

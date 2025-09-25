@@ -7,11 +7,12 @@ import { useEffect } from 'react'
 import { Heart } from 'lucide-react'
 
 import { useProductStore } from '../store/productStore.js'
+import TopDealItems from '../components/TopDealItems.jsx'
 
 const ShopPage = () => {
 
 
-  const { products, fetchAllProducts } = useProductStore()
+  const { products, fetchAllProducts, fetchOfferProducts, offerProducts } = useProductStore()
 
   //console.log(products)
   useEffect(() => {
@@ -21,12 +22,20 @@ const ShopPage = () => {
   
     
   }, [fetchAllProducts])
+
+  useEffect(() => {
+      
+  
+      fetchOfferProducts()
+    }, [fetchOfferProducts])
   
   return (
     <div className="bg-pink-50">
       <section className="w-full h-[400px] md:h-[500px] relative">
         <ShopHero />
       </section>
+
+      <TopDealItems offerProducts={offerProducts}/>
 
       <section className="mt-12 max-w-7xl px-4 md:px-8 mx-auto flex items-center justify-center ">
 
@@ -45,6 +54,8 @@ const ShopPage = () => {
 
 
       </section>
+
+      
 
       
     </div>

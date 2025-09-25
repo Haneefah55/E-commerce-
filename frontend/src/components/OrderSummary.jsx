@@ -1,20 +1,47 @@
 import React, { useState } from 'react'
 import { useCartStore } from '../store/cartStore.js'
-import { MoveRight } from 'lucide-react'
+import { MoveRight, Loader } from 'lucide-react'
 import { Link } from 'react-router'
 import { useEffect } from 'react'
+import { useAuthStore } from '../store/userStore.js'
+
 
 
 const OrderSummary = () => {
 
-  const { total, subtotal, coupon, isCouponApplied, createCoupon } = useCartStore()
+  const { total, subtotal, coupon, isCouponApplied, calculateTotals, applyCoupon, isLoading, discountPercent } = useCartStore()
+  
+  const { user } = useAuthStore()
   const [codeInput, setCodeInput] = useState()
-  const isLoading = false
+  
+  //console.log("iscouponapplied", isCouponApplied)
+  //console.log("coupon", coupon)
+
+  const email = user?.email
+  
   const savings = subtotal - total 
 
-  const handleApplyCode= async() =>{
-    console.log("code applied")
+  //console.log("coupon", coupon)
+
+  
+
+  const handleApplyCode= async(e) =>{
+
+    e.preventDefault()
+
+    try {
+      await applyCoupon(codeInput)
+      
+    } catch (error) {
+      console.log(error)
+    }
+
+
+    setCodeInput("")
+
   }
+
+
 
   const handleRemoveCoupon = async () =>{
     console.log("coupon removed")
@@ -22,9 +49,17 @@ const OrderSummary = () => {
 
   useEffect(() => {
 
-   createCoupon()
+    if(coupon){
+      setCodeInput(coupon)
+    }
+  }, [coupon])
+  
+  useEffect(() => {
 
-  }, [createCoupon])
+    calculateTotals()
+
+  }, [calculateTotals])
+
   
 
 
@@ -57,8 +92,8 @@ const OrderSummary = () => {
             {coupon && isCouponApplied && (
 
               <dl className='flex items-center mb-2 justify-between gap-4'>
-                <dt className='text-base text-pink-600 '>Coupon ({coupon.code})</dt>
-                <dd className='text-base font-bold text-pink-800'>-{coupon.discountPercenage}</dd>
+                <dt className='text-base text-pink-600 '>Coupon ({coupon})</dt>
+                <dd className='text-base font-bold text-pink-800'>-{discountPercent}</dd>
               </dl>
 
             )}
@@ -70,7 +105,11 @@ const OrderSummary = () => {
 
           </div>
 
-          <button className='flex w-full self-center items-center mt-4 py-2 px-4 justify-center rounded-md bg-pink-600 text-white font-semibold transition-all hover:bg-transparent hover:border-2 hover:border-pink-600 hover:text-pink-600 hover:translate-y-3'>Proceed to checkout</button>
+          <Link to={'/checkout-page'} className='flex w-full self-center items-center mt-4 py-2 px-4 justify-center rounded-md bg-pink-600 text-white font-semibold transition-all hover:bg-transparent hover:border-2 hover:border-pink-600 hover:text-pink-600 hover:translate-y-3' 
+            
+          >
+          Proceed to checkout
+          </Link>
 
           <div className='flex items-center justify-center gap-2 self-center w-full'>
             <span className='text-sm text-gray-700'>or</span>
@@ -95,7 +134,7 @@ const OrderSummary = () => {
             placeholder='Enter code here'
             value={codeInput}
             required
-            onChange={(e) => (setEmail(e.target.value))}
+            onChange={(e) => (setCodeInput(e.target.value))}
             className="w-full py-2 px-4 bg-white/30 bg-opacity-50 rounded-md border-2 border-pink-400 outline-none focus:border-pink-600 text-purple-800 placeholder:text-purple-800 transition duration-200 "
 
           />
@@ -110,10 +149,10 @@ const OrderSummary = () => {
                                     
           </button>
 
-          {isCouponApplied && coupon && (
+          {isCouponApplied && (
             <div className='mt-4'>
               <p className='text-xl font-semibold text-purple-900'>Coupon applied</p>
-              <p className='text-sm  mt-3 text-purple-900'>{coupon.code} - {coupon.discountPercent}%off</p>
+              <p className='text-sm  mt-3 text-purple-900'>{coupon} - {discountPercent}%off</p>
               <button
                 className="w-full py-2 px-5 mt-5 bg-pink-600 text-gray-100 font-semibold transform transition hover:scale-90 duration-200"
                 onClick={handleRemoveCoupon}
@@ -129,7 +168,7 @@ const OrderSummary = () => {
           {coupon && (
             <div className='mt-4'>
               <h2 className='text-xl font-semibold text-purple-900'>Your Available Coupon:</h2>
-              <p className='text-sm  mt-3 text-purple-900'>{coupon.code} - {coupon.discountPercent}%off</p>
+              <p className='text-sm  mt-3 text-purple-900'>{coupon} - {discountPercent}%off</p>
             </div>
           )}
         </div>

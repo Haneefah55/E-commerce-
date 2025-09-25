@@ -10,6 +10,7 @@ export const useProductStore = create((set) => ({
   product: null,
   recommendedProducts: [],
   featuredProducts: [],
+  offerProducts: [],
 
   setProducts: (products) => set({ products }),
 
@@ -54,12 +55,35 @@ export const useProductStore = create((set) => ({
     
 
     try {
-      const response = await axios.patch(`/api/product/${id}`)
+      const response = await axios.patch(`/api/product/featured/${id}`)
 
       
       set((prevProducts) => ({
         products: prevProducts.products.map((product) =>
           product._id === id ? {...product, isFeatured: response.data.isFeatured } : product,
+          
+        ),
+      }))
+
+      
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+
+
+  },
+
+  toggleOfferProducts: async(id) =>{
+    
+
+    try {
+      const response = await axios.patch(`/api/product/offer/${id}`)
+
+      
+      set((prevProducts) => ({
+        products: prevProducts.products.map((product) =>
+          product._id === id ? {...product, isOffer: response.data.isOffer } : product,
           
         ),
       }))
@@ -83,13 +107,21 @@ export const useProductStore = create((set) => ({
     }
   },
 
+  fetchOfferProducts: async() =>{
+
+    try {
+      const res = await axios.get('/api/product/offer')
+      set({ offerProducts: res.data})
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
   deleteProduct: async(id) =>{
 
     try {
 
-    
-
-      
+  
       const response = await axios.delete(`/api/product/${id}`)
 
       

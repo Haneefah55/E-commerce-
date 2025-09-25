@@ -47,7 +47,7 @@ const ProductForm = () =>{
   
   return(
   
-    <div className=" flex w-[320px] md:w-[400px] p-3 items-center justify-center self-center flex-col font-[Merienda]">
+    <div className=" flex w-[300px] md:w-[400px] p-3 items-center justify-center self-center flex-col font-[Merienda]">
       
       <h3 className="bg-pink-600 text-transparent bg-clip-text font-bold ">Add New Product</h3>
       

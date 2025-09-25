@@ -17,15 +17,15 @@ export const getCoupon = async(req, res) =>{
   
   try {
     const coupon = await Coupon.findOne({ user: req.user._id, isActive: true })
-    console.log(coupon)
-    res.json(coupon || null)
+    //console.log(coupon.code)
+    res.json({ coupon: coupon.code, discountPercent: coupon.discountPercent })
   } catch (error) {
     console.error("Error in getCoupon contoller", error.message);
     res.status(500).json({ message: error.message })
   }
 }
 
-export const validateCoupon = async(req, res) =>{e
+export const validateCoupon = async(req, res) =>{
   
   try {
     const { code } = req.body
@@ -39,11 +39,13 @@ export const validateCoupon = async(req, res) =>{e
       await coupon.save()
       return res.status(404).json({ message: "coupon expired" })
     }
+
     res.json({
       message: "coupon validated",
       code: coupon.code,
       discountPercent: coupon.discountPercent,
     })
+
   } catch (error) {
     console.error("Error in validateCoupon controller", error.message);
     res.status(500).json({ message: error.message })
@@ -58,16 +60,29 @@ export const createCoupon = async(req, res)=>{
     
     const randomCode = generateRandomCode()
 
+    const user = req.user
+
+    const isUserCoupon = await Coupon.findOne({ user: user._id, isActive: true })
+
+    if(isUserCoupon){
+      return res.json(isUserCoupon)
+    }
+
     
     const newCoupon = await Coupon.create({
       code: randomCode,
       discountPercent: 10,
       expire: new Date(Date.now() + 20 * 24 * 60 * 60 * 1000),
-      user: req.user._id
+      user: user._id
     })
 
-    console.log(newCoupon)
-    res.json(newCoupon)
+   // console.log(newCoupon)
+    res.json({
+      coupon: newCoupon.code,
+      discountPercent: newCoupon.discountPercent,
+      expire: newCoupon.expire
+
+    })
     
     
     

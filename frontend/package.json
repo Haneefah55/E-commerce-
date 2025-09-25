@@ -10,16 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@paystack/inline-js": "^2.22.7",
     "axios": "^1.11.0",
     "lucide-react": "^0.536.0",
     "react": "^19.1.0",
+    "react-confetti": "^6.4.0",
     "react-dom": "^19.1.0",
     "react-hot-toast": "^2.5.2",
     "react-router": "^7.7.1",
+    "recharts": "^3.2.1",
     "zustand": "^5.0.7"
   },
   "proxy": "http://localhost:5500",
-  
   "devDependencies": {
     "@eslint/js": "^9.30.1",
     "@types/react": "^19.1.8",

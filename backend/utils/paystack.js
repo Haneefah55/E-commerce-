@@ -1,4 +1,5 @@
-import Paystack from '@paystack/paystack-sdk'
+import paystack from 'paystack'
+
 import dotenv from 'dotenv'
 
 
@@ -6,7 +7,7 @@ dotenv.config()
 
 
 
-const paystack = new Paystack(process.env.PAYSTACK_SECRET_CODE)
+const paystackClient = paystack(process.env.PAYSTACK_SECRET_KEY)
 
-export default paystack
+export default paystackClient
   

@@ -1,4 +1,5 @@
 import User from '../models/user.model.js'
+import Order from '../models/order.model.js'
 import { generateToken, setCookies, getStoredToken } from '../utils/generateToken.js'
 
 
@@ -128,6 +129,41 @@ export const profile = async(req, res) =>{
   }
 }
 
+export const changePassword = async(req, res) =>{
+
+
+  try {
+
+    const { oldPassword, newPassword } = req.body
+
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+    }
+
+    const isMatch = await user.comparePassword(oldPassword)
+
+    if(!isMatch){
+      return res.status(400).json({ message: "old password is incorrect" })
+    }
+
+    user.password = newPassword
+
+    await user.save()
+    console.log("password changed")
+
+    res.status(200).json({ message: "User password changed successfully" })
+
+  } catch (error) {
+    console.error("Error in changepassword contoller", error.message);
+    res.status(400).json({ 
+      success: false,
+      message: error.message
+    })
+  }
+}
+
 export const logout = async(req, res) =>{
   try {
     //await delCookies(req)
@@ -157,5 +193,101 @@ export const refreshToken = async(req, res) =>{
     
     console.error("Error in refresh token contoller", error.message);
     res.status(500).json({ message: error.message })
+  }
+}
+
+export const addShippingAddress = async(req, res) =>{
+
+  try {
+    const { address } = req.body
+
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+    }
+
+    user.shippingAddress = address
+
+    await user.save()
+    console.log("address saved")
+
+    res.json({ shippingAddress: user.shippingAddress })
+
+
+
+  } catch (error) {
+    console.error("Error in addShippingAdress contoller", error.message);
+    res.status(400).json({ 
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const getShippingAddress = async(req, res)=> {
+
+  try {
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+
+
+    }
+
+    res.json({ shippingAddress: user.shippingAddress })
+  } catch (error) {
+
+    console.error("Error in getshippingaddress contoller", error.message);
+    res.status(400).json({ 
+      success: false,
+      message: error.message
+    })
+    
+  }
+
+}
+
+export const getUserOders = async(req, res) =>{
+
+  try {
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+
+    }
+
+    const userOrders = await Order.find({ user: user._id })
+
+    res.json(userOrders)
+
+  } catch (error) {
+    console.error("Error in getUsersOrder contoller", error.message);
+    res.status(400).json({ 
+      success: false,
+      message: error.message
+    })
+  }
+
+
+}
+
+export const getOrder = async(req, res) =>{
+  try {
+
+    const { id } = req.params
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+
+    }
+
+    const order = await Order.findById(id)
+    res.json(order)
+  } catch (error) {
+    
   }
 }
