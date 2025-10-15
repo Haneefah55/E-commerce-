@@ -3,6 +3,7 @@ import { useCartStore } from '../store/cartStore.js'
 import { useAuthStore } from '../store/userStore.js'
 import toast from 'react-hot-toast'
 import { ShoppingCart, Heart, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Link } from 'react-router'
 
 const FeaturedProducts = ({ featuredProducts }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -16,6 +17,8 @@ const FeaturedProducts = ({ featuredProducts }) => {
 
 
   const onWishlist = wishlist?.some((item) => item._id === featuredProducts._id)
+
+ 
 
   const handleAddToCart = async(product) =>{
     if(!user){
@@ -78,7 +81,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
   
     <div className='py-12 w-full max-w-4xl mx-auto'>
       <div className=' container px-4  '>
-        <h3 className="p-2 text-purple-800 ml-2 font-[Merienda] font-semibold text-xl">Featured Products</h3>
+        <h3 className="p-2 text-purple-800 ml-2 font-[Merienda] font-semibold text-xl">Must-Try Treats</h3>
         <div className='w-[280px] h-1 mb-3 bg-pink-800 flex' />
         <div className='relative'>
           <div className='overflow-hidden mx-auto'>
@@ -92,7 +95,7 @@ const FeaturedProducts = ({ featuredProducts }) => {
                   key={product._id} 
                 
                 >
-                  <div className="w-full h-[250px] cursor-pointer rounded-2xl relative">
+                  <Link to={`/product/${product._id}`} className="w-full h-[250px] cursor-pointer rounded-2xl relative">
                     <img src={product?.image}
                       alt={product?.name}
                       className="w-full h-full object-cover transition-transform  rounded-2xl duration-500 ease-out group-hover:scale-110"
@@ -100,14 +103,15 @@ const FeaturedProducts = ({ featuredProducts }) => {
                     />
 
                     <button 
-                      className='flex items-center gap-2 justify-center bg-white p-2 absolute font-semibold font-[Merienda] rounded-md text-xs bottom-4 left-[45%] translate-y-0 -translate-x-[40%]  text-pink-600 '
+                      className='flex items-center gap-2 justify-center bg-white p-2 absolute font-semibold font-[Merienda] rounded-md text-xs bottom-4 left-[45%] translate-y-0 -translate-x-[40%]  text-pink-600 disabled:bg-gray-500 disabled:text-white'
                       onClick={() => handleAddToCart(product)}
+                      disabled={product?.stock === 0}
                       
                     >
                       <ShoppingCart className='w-5 h-5'  />
-                      Add to cart
+                      {product?.stock === 0 ? "Out of stock" : "Add to cart"}
                     </button>
-                  </div>
+                  </Link>
 
                   <div className=" font-[Merienda] text-sm font-semibold flex flex-col p-2 text-nowrap text-fuchsia-900 items-center">
                   <p>{product?.name}</p>

@@ -39,6 +39,13 @@ export const initializePayment = async(req, res) =>{
     console.log(total)
     console.log(coupon)
     console.log(randomCode)
+    
+    if(coupon){
+      await Coupon.findOneAndUpdate({ code: coupon, user: user._id }, { isActive: false })
+      console.log("coupon deleted")
+    }
+
+    
 
     
 
@@ -48,7 +55,7 @@ export const initializePayment = async(req, res) =>{
       metadata: {
         totalAmount: total,
         orderId: randomCode,
-        coupon: coupon,
+    
         
       },
     })
@@ -78,8 +85,8 @@ export const verifyPayment = async(req, res) =>{
       res.json({ message: "no reference"})
     }
     
-    console.log("ref", reference)
-    console.log("secret ket", process.env.PAYSTACK_SECRET_KEY)
+    //console.log("ref", reference)
+    //console.log("secret ket", process.env.PAYSTACK_SECRET_KEY)
 
     const response = await axios.get(
       `https://api.paystack.co/transaction/verify/${reference}`,
@@ -108,8 +115,7 @@ export const verifyPayment = async(req, res) =>{
       
       console.log("metadata", metadata)
       //delete coupon code
-      await Coupon.findOneAndUpdate({ code: metadata.coupon, user: metadata.userId }, { isActive: false })
-      console.log("coupon deleted")
+     
       
       // create a new order
       console.log("cart items", cartItems)
@@ -119,6 +125,9 @@ export const verifyPayment = async(req, res) =>{
         user: user._id,
         products: cartItems.map((product) =>({
           product: product._id,
+          name: product.name,
+          category: product.category,
+          image: product.image,
           quantity: product.quantity,
           price: product.price,
         })),

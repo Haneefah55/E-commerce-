@@ -194,7 +194,7 @@ const PaymentPage = ({ email }) => {
             <h3 className='mt-3'>
             {email}
             </h3>
-            <p className=' font-bold'>Pay <span className='text-green-600 font-bold'>NGN {total}</span></p>
+            <p className=' font-bold'>Pay <span className='text-green-600 font-bold'>NGN {total.toLocaleString()}</span></p>
           </div>
           
         </div>
@@ -305,7 +305,7 @@ const PaymentPage = ({ email }) => {
             diabled={isLoading}
         
           >            
-            { isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : `Pay NGN ${total}`}
+            { isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : `Pay NGN ${total.toLocaleString()}`}
                                     
           </button>
 

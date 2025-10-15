@@ -11,6 +11,7 @@ export const useProductStore = create((set) => ({
   recommendedProducts: [],
   featuredProducts: [],
   offerProducts: [],
+  relatedProduct: [],
 
   setProducts: (products) => set({ products }),
 
@@ -202,7 +203,30 @@ export const useProductStore = create((set) => ({
     
 
 
+  },
+
+  fetchRelatedProduct: async(product) =>{
+
+    const category = product.category
+    console.log(category)
+    try {
+      const res = await axios.get(`/api/product/related/${category}`)
+      //console.log("related res", res.data)
+
+
+      const relatedProduct = res.data.filter((item) => item._id !== product._id)
+      //console.log(relatedProduct)
+
+      set({ relatedProduct })
+
+    } catch (error) {
+      console.log("related error", error)
+    }
+    
+
+
   }
+  
 
  
 

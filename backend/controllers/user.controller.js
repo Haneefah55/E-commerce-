@@ -1,5 +1,6 @@
 import User from '../models/user.model.js'
 import Order from '../models/order.model.js'
+import Product from '../models/products.model.js'
 import { generateToken, setCookies, getStoredToken } from '../utils/generateToken.js'
 
 
@@ -93,9 +94,11 @@ export const login = async(req, res) =>{
         cartItems: user.cartItems,
         role: user.role,
         wishlist: user.wishlist,
-    })
+        createdAt: user.createdAt,
+        shippingAddress: user.shippingAddress,
+      })
     } else {
-      return res.status(401).json({ message: "Incorrect email or password"})
+      return res.status(400).json({ message: "Incorrect email or password"})
     }
   } catch (error) {
     console.error("Error in login contoller", error.message);
@@ -110,13 +113,15 @@ export const profile = async(req, res) =>{
   
   
   try {
-    
+   
   
     const user = await User.findById(req.user._id).select("-password")
     
     if(!user){
       return res.status(404).json({ message: "User not found" })
     }
+
+    //console.log(user)
   
     res.status(200).json(user)
     
@@ -164,6 +169,56 @@ export const changePassword = async(req, res) =>{
   }
 }
 
+export const EditProfile = async(req, res) =>{
+  try {
+    
+    const { name, email } = req.body
+
+    const user = await User.findById(req.user._id).select("-password")
+
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+    }
+
+    user.name = name
+    user.email = email
+
+    await user.save()
+    console.log("user profile edited successfully")
+    res.json(user)
+
+
+  } catch (error) {
+    console.error("Error in editprofile contoller", error.message);
+    res.status(400).json({ 
+      success: false,
+      message: error.message
+    })
+  }
+}
+
+export const deleteUser = async(req, res) =>{
+  try {
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+    }
+
+    await User.findByIdAndDelete(req.user._id)
+
+    console.log("user deleted successfully")
+
+    res.json({ message: "user deleted successsfully"})
+  } catch (error) {
+    console.error("Error in delete user  contoller", error.message);
+    res.status(400).json({ 
+      success: false,
+      message: error.message
+    })
+  }
+}
+
 export const logout = async(req, res) =>{
   try {
     //await delCookies(req)
@@ -183,7 +238,15 @@ export const refreshToken = async(req, res) =>{
   
   try {
     
-    await getStoredToken(req, res)
+    const accessToken = await getStoredToken(req, res)
+
+      res.cookie("access_token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    })
+    
     
     res.json({ message: "Token refreshed successfully"})
     
@@ -259,7 +322,7 @@ export const getUserOders = async(req, res) =>{
 
     }
 
-    const userOrders = await Order.find({ user: user._id })
+    const userOrders = await Order.find({ user: user._id }).sort({ timestamp: -1 }).limit(5)
 
     res.json(userOrders)
 
@@ -289,5 +352,82 @@ export const getOrder = async(req, res) =>{
     res.json(order)
   } catch (error) {
     
+  }
+}
+
+export const toggleProductToWishlist = async (req, res) =>{
+
+  try {
+
+    const productId = req.params.id
+    const id = req.user._id
+
+    const user = await User.findById(id).select("-password")
+
+    if(!user){
+      return res.status(404).json({ message: "user not found" })
+    }
+
+    const product = await Product.findById(productId)
+    if(!product){
+      return res.status(404).json({ message: "Products not found" })
+    }
+   
+
+    const index = user.wishlist.find((item) => item.id === productId)
+
+    //console.log("index", index)
+
+    if(index){
+
+      user.wishlist = user.wishlist.filter((item) => item._id.toString() !== productId)
+      
+     
+    } else {
+      user.wishlist.push(productId)
+     
+      
+    }
+
+    await user.save()
+    await user.populate("wishlist")
+
+  
+
+    res.json(user.wishlist)
+  
+    
+
+  } catch (error) {
+    console.error("Error in toggleProductToWishlist contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
+ 
+}
+
+export const getWishlist = async(req, res) =>{
+  try {
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+
+    }
+
+    const products = await Product.find({ _id: {$in: req.user.wishlist } })
+    
+    const wishlistItems = products.map((product) =>{
+      const item = req.user.wishlist.find((item) => item.id === product.id)
+      
+      return { ...product.toJSON() }
+    })
+
+    res.json(wishlistItems)
+  } catch (error) {
+    console.error("Error in get wishlist contoller", error.message);
+    res.status(400).json({ 
+      success: false,
+      message: error.message
+    })
   }
 }

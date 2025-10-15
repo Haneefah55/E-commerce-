@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import axios from 'axios'
 
 
+
 axios.defaults.withCredentials = true
 
 //const API_URL= import.meta.env.MODE === "development" ? "/api" : "/api"
@@ -14,7 +15,7 @@ export const useAuthStore = create((set, get) =>({
   checkingAuth: true,
   wishlist: [],
   shippingAddress: {},
-  order: [],
+  orders: [],
 
 
   setUser: (user) => set({ user }),
@@ -30,11 +31,12 @@ export const useAuthStore = create((set, get) =>({
   
       console.log("Account created successfully")
       toast.success("Account created successfully")
+      
     } catch (error) {
       set({ isLoading: false })
     
       console.log(error)
-      toast.error(error.response?.data?.message || error.message || "Error sigining up")
+      toast.error(error.message || "Error sigining up")
       throw error
     }
   },
@@ -89,15 +91,66 @@ export const useAuthStore = create((set, get) =>({
 
   },
   
+  editProfile: async(name, email) => {
+    set({ isLoading: true })
+
+    try {
+      const response = await axios.put("/api/auth", { name, email })
+
+      console.log("editprofile", response)
+
+      set({ isLoading: false, user: response.data })
+
+      
+      
+    } catch (error) {
+      set({ isLoading: false })
+    
+      console.log(error)
+      toast.error(error.message || "Error updating user")
+      throw error
+    }
+
+  },
+
+  deleteUser: async() =>{
+
+    set({ isLoading: true })
+
+    try {
+      const response = await axios.delete("/api/auth")
+
+      console.log("delteuser", response)
+
+      set({ isLoading: false, user: null })
+
+      window.location.href = '/'
+
+      console.log("user account delete")
+
+    } catch (error) {
+
+      set({ isLoading: false })
+    
+      console.log(error)
+      toast.error(error.message || "Error deleting user")
+      throw error
+    }
+
+  },
+
   checkAuth: async() =>{
     set({ checkingAuth: true })
-    
+  
     try {
-      const response = await axios.get('/api/auth/profile')
-      //console.log(response.data)
+
+      
+      const response = await axios.get(`/api/auth`)
+      console.log("check auth res ", response.data)
       
       set({ user: response.data, checkingAuth: false })
     } catch (error) {
+      console.log("check auth", error)
   
       set({ user: null, checkingAuth: false })
         
@@ -106,7 +159,7 @@ export const useAuthStore = create((set, get) =>({
 
   getWishlist: async() =>{
     try {
-      const res = await axios.get('/api/product/wishlist')
+      const res = await axios.get('/api/auth/wishlist')
       //console.log("list from server", res.data)
 
       set({ wishlist: res.data })
@@ -126,7 +179,7 @@ export const useAuthStore = create((set, get) =>({
         
       }
       
-      const response = await axios.patch(`/api/product/wishlist/${id}`)
+      const response = await axios.patch(`/api/auth/wishlist/${id}`)
 
       console.log("response", response.data)
 
@@ -181,25 +234,128 @@ export const useAuthStore = create((set, get) =>({
     }
 
   },
+  fetchUserOrders: async() =>{
+    try {
+      const response = await axios.get('/api/auth/order')
+      console.log("order response", response)
+
+      set({ orders: response.data })
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message || "error fetching order")
+    }
+
+  },
+  
 
 
 
   logout: async() =>{
     try {
       const response = await axios.post("/api/auth/logout")
-      set({ user: null })
-      toast.success('user logout successfully')
+      set({ user: null, checkingAuth: false })
+      toast.success('user logout successfully', { id:'login' })
     } catch (error) {
       console.log(error)
+      set({ checkingAuth: false })
     }
+  },
+
+  refreshToken: async()=>{
+    // prevent multiple simultaneous refresh attempts
+    /*** 
+    const { checkingAuth } = get()
+    if(checkingAuth) return
+**/
+    try {
+      const response = await axios.get('/api/auth/refresh-token')
+      console.log("refresh-response", response)
+
+      set({ checkingAuth: false })
+      return response.data
+    } catch (error) {
+      set({ user: null, checkingAuth: false })
+      throw error
+    }
+
+
   }
 
 
-
-  
-
-  
-  
-  
-  
 }))
+
+
+// Axios interceptors for token refresh
+
+let refreshPromise = null
+
+axios.interceptors.response.use(
+  (response) => response, 
+  async(error) => {
+    console.log("inter error", error)
+    console.log('status', error.response.status)
+
+    const originalRequest = error.config
+    
+    //console.log("originalRequest._retry", originalRequest)
+    if(error.response?.status === 401 ) {
+
+      if(originalRequest.url.includes('/api/auth/refresh-token')) {
+        return Promise.reject(error)
+      }
+
+      if(!originalRequest._retry){
+
+        originalRequest._retry = true
+
+        console.log("here done")
+
+        console.log("originalRequest._retry", originalRequest)
+
+        try {
+        //if a refresh token is already in progress, wait for it to complete
+
+        if(refreshPromise){
+          await refreshPromise
+          console.log("refreshPromise")
+          return axios(originalRequest)
+        }
+
+        refreshPromise = useAuthStore.getState().refreshToken()
+
+        await refreshPromise
+
+          //clear the promise after successful refresh
+        
+        refreshPromise = null
+
+        console.log("refresh success")
+        // retry original request with new token
+
+        return axios(originalRequest)
+        } catch (refreshError) {
+
+          //clear the promise on failure
+          console.log("refresh error", refreshError)
+
+          refreshPromise = null
+
+          //if refresh failed logout user
+
+          useAuthStore.getState().logout()
+
+          return Promise.reject(refreshError)
+          
+        }
+      }
+
+      
+    }
+
+    return Promise.reject(error)
+
+  }
+
+  
+  
+)

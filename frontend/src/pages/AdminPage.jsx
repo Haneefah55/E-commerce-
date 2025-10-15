@@ -70,9 +70,9 @@ const AdminPage = () =>{
         ))}
       </div>
       
-      <div className="max-w-[1200px] w-full overflow-x-auto [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-pink-200 [&::-webkit-scrollbar-thumb]:bg-pink-700   flex md:justify-center md:items-center p-3">
+      <div className="max-w-[1200px] w-full   flex md:justify-center md:items-center p-1 md:p-3">
 
-        <div>
+        <div className='w-full flex items-center justify-center'> 
           {activeTab === "add" && <ProductForm />}
           {activeTab === "product" && <ProductList />}
           {activeTab === "analytics" && <AnalyticsTab />}

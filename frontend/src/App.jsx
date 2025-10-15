@@ -9,7 +9,6 @@ import SignUpPage from './pages/SignUpPage.jsx'
 import LoginPage from './pages/LoginPage.jsx'
 import NotFoundPage from './pages/NotFoundPage.jsx'
 import Navbar from './components/Navbar.jsx'
-import AccountCreatedPage from './pages/AccountCreatedPage.jsx'
 import AdminPage from './pages/AdminPage.jsx'
 import Loader from './components/Loader.jsx'
 import EditProduct from './components/EditProduct.jsx'
@@ -22,6 +21,11 @@ import CheckoutPage from './pages/CheckoutPage.jsx'
 import PaymentPage from './pages/PaymentPage.jsx'
 import PaymentSuccess from './pages/PaymentSuccess.jsx'
 import PaymentFailed from './pages/PaymentFailed.jsx'
+import OrderPage from './pages/OrderPage.jsx'
+import WishlistPage from './pages/WishlistPage.jsx'
+import UserSettingsPage from './pages/UserSettingsPage.jsx'
+import ProductPage from './pages/ProductPage.jsx'
+import SearchResultPage from './pages/SearchResultPage.jsx'
 
 
 const RedirectAuthenticatedUser = ({ children }) =>{
@@ -43,7 +47,7 @@ const App = () => {
   
   
   const pathname= useLocation().pathname
-  const matchPaths = ['/signup', '/login', '/account-created', '/purchase-success', '/purchase-failed' ];
+  const matchPaths = ['/signup', '/login', '/purchase-success', '/purchase-failed' ];
 
   const isMatch = matchPaths.some(path => pathname.includes(path));
   //console.log(wishlist)
@@ -52,8 +56,8 @@ const App = () => {
   
   useEffect(() =>{
     
-    
     checkAuth()
+    
   }, [checkAuth])
 
   useEffect(() => {
@@ -72,10 +76,11 @@ const App = () => {
     }
 
     
+    
   }, [user])
   
   
-  if(checkingAuth) return <Loader />
+
   
   return(
     <div className="relative  w-screen h-screen overflow-auto [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-pink-200 [&::-webkit-scrollbar-thumb]:bg-pink-700 ">
@@ -98,8 +103,7 @@ const App = () => {
           
         } />
         
-        
-        <Route path="/account-created" element={ user ? <AccountCreatedPage /> : <Navigate to={'/login'} replace />} />
+      
         
         <Route path="*" element={<NotFoundPage />} />
 
@@ -108,14 +112,19 @@ const App = () => {
         <Route path="/shop" element={<ShopPage />} />
 
         <Route path="/user/cart" element={ user ? <CartPage /> : <Navigate to={'/login'} replace />} />
+        <Route path="/user/order" element={ user ? <OrderPage /> : <Navigate to={'/login'} replace />} />
+        <Route path="/user/wishlist" element={ user ? <WishlistPage /> : <Navigate to={'/login'} replace />} />
+        <Route path="/user/settings" element={ user ? <UserSettingsPage /> : <Navigate to={'/login'} replace />} />
         <Route path="/checkout-page" element={ user ? <CheckoutPage /> : <Navigate to={'/login'} replace />} />
         <Route path="/payment" element={ user ? <PaymentPage /> : <Navigate to={'/login'} replace />} />
-        <Route path="/purchase-success/:id" element={ user ? <PaymentSuccess /> : <Navigate to={'/login'} replace />} />
+        <Route path="/purchase-success/:id" element={ <PaymentSuccess />} />
         <Route path="/purchase-failed" element={ user ? <PaymentFailed /> : <Navigate to={'/login'} replace />} />
 
         <Route path="/edit-product/:id" element={ user?.role === "admin" ? <EditProduct /> : <Navigate to={'/login'} replace />}  />
 
         <Route path="/category/:category" element={<CategoryPage />} />
+        <Route path="/product/:id" element={<ProductPage />} />
+        <Route path="/search" element={<SearchResultPage />} />
         
       </Routes>
       

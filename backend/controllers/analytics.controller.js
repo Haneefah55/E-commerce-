@@ -4,6 +4,7 @@ import Order from '../models/order.model.js'
 
 
 
+
 export const getAnalyticsData = async() =>{
   
   const totalUsers = await User.countDocuments()
@@ -47,7 +48,7 @@ export const getDailySalesData = async(startDate, endDate) =>{
       
       {
         $group:{
-          _id: { $dateToString: { format: "%Y-%m-%d", date: "createdAt" } },
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
           sales: { $sum: 1 },
           revenue: { $sum: "$totalAmount" },
         },

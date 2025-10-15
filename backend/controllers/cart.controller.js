@@ -77,6 +77,12 @@ export const updateQuantity = async(req, res) =>{
 export const getCart = async(req, res) =>{
   
   try{
+    const user = await User.findById(req.user._id)
+
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+    }
+    
     const products = await Product.find({ _id: {$in: req.user.cartItems } })
     
     const cartItems = products.map((product) =>{
@@ -97,11 +103,28 @@ export const clearCart = async(req, res) =>{
   try {
     const user = await User.findById(req.user._id)
 
+    const items = user.cartItems
+
+    if(!items || items.length === 0){
+      return res.status(400).json({ message: "Cart is empty" })
+    }
+
+    const bulkOperation = items.map((item) => ({
+      updateOne: {
+        filter: { _id: item._id },
+        update: { $inc: { stock: -item.quantity } }
+      },
+    }))
+
+
+    const result = await Product.bulkWrite(bulkOperation)
+    console.log(`${result.modifiedCount}, product quantity updated`)
+
     user.cartItems = []
 
     await user.save()
     console.log("cart items deleted successfully")
-    res.json({ message: "cart items deleted successfully" })
+    res.json({ message: "stock updated, cart items deleted successfully" })
 
 
   } catch (error) {

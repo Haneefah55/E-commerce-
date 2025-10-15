@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
   stock: {
     type: Number,
     required: true,
-    default: 1,
+    
 
   },
   isFeatured: {
@@ -37,6 +37,33 @@ const productSchema = new mongoose.Schema({
     default: false,
   },
   discountedPrice: Number,
+
+  review: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+          
+      },
+
+      name: String,
+
+      comment: {
+        type: String,
+        required: true,
+      },
+
+      ratings: Number,
+      
+      createdAt: {
+        type: Date,
+        default: Date.now(),
+      },
+
+    },
+
+  ],
 
   
   

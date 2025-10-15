@@ -3,6 +3,7 @@ import { useCartStore } from '../store/cartStore.js'
 import { useAuthStore } from '../store/userStore.js'
 import toast from 'react-hot-toast'
 import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Link } from 'react-router'
 
 const TopDealItems = ({ offerProducts }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -14,10 +15,11 @@ const TopDealItems = ({ offerProducts }) => {
   const { addToCart } = useCartStore()
 
   const discount = 20
+  console.log("offerProducts", offerProducts)
 
 
 
-
+  
 
   const handleAddToCart = async(product) =>{
     if(!user){
@@ -95,27 +97,33 @@ const TopDealItems = ({ offerProducts }) => {
                   key={product._id} 
                   /**style={{ width: `${itemWidth}%`}} **/
                 >
-                  <div className="w-full h-[250px] cursor-pointer rounded-2xl relative">
+                  <Link  to={`/product/${product._id}`} className="w-full h-[250px] cursor-pointer rounded-2xl relative">
                     <img src={product?.image}
                       alt={product?.name}
                       className="w-full h-full object-cover transition-transform  rounded-2xl duration-500 ease-out group-hover:scale-110"
                       loading="lazy"
                     />
+                  </Link>
 
-                    <button 
-                      className='flex items-center gap-2 justify-center bg-white p-2 absolute font-semibold font-[Merienda] rounded-md text-xs bottom-4 left-[45%] translate-y-0 -translate-x-[40%]  text-pink-600 '
-                      onClick={() => handleAddToCart(product)}
-                      
-                    >
-                      <ShoppingCart className='w-5 h-5'  />
-                      Add to cart
-                    </button>
-                  </div>
+                  <button 
+                    className='flex items-center gap-2 justify-center bg-white p-2 absolute font-semibold font-[Merienda] rounded-md text-xs bottom-[35%] left-[45%] translate-y-0 -translate-x-[40%]  text-pink-600 '
+                    onClick={() => handleAddToCart(product)}
+                    
+                  >
+                    <ShoppingCart className='w-5 h-5'  />
+                    Add to cart
+                  </button>
+                
 
                   <div className=" font-[Merienda] text-sm font-semibold flex flex-col p-2 text-nowrap text-fuchsia-900 items-center">
                   <p>{product?.name}</p>
-                  <s className='text-xs mt-2'>&#8358; {product?.price?.toFixed(2)}</s>
-                  <p className='text-xs mt-2'>&#8358; {product?.discountedPrice?.toFixed(2)}</p>
+                  <div className='flex gap-2 items-center'>
+                    <p className='text-xs mt-2'>&#8358; {product?.discountedPrice?.toLocaleString()}</p>
+                    <s className='text-xs text-gray-800 mt-2'>&#8358; {product?.price?.toLocaleString()}</s>
+                    
+
+                  </div>
+                  
                     
                   </div>
 

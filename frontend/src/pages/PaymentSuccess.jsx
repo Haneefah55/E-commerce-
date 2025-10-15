@@ -17,7 +17,7 @@ const PaymentSuccess = () => {
   }, [clearCart])
 
   return (
-    <div className='h-screen w-screen flex items-center font-[Merienda] justify-center px-4'>
+    <div className='min-h-screen w-screen flex items-center font-[Merienda] justify-center  py-20 md:py-16 px-4'>
 
       <Confetti
 
@@ -35,20 +35,20 @@ const PaymentSuccess = () => {
       <div className='max-w-md w-full bg-pink-200 rounded-lg shadow-xl overflow-hidden relative'>
         <div className='p-5 sm:p-6'>
           <div className='flex justify-center'>
-            <CheckCircle className='text-purple-800 w-16 h-16 mb-4'/>
+            <CheckCircle className='text-purple-800 w-10 h-10 sm:w-16 sm:h-16  mb-4'/>
 
           </div>
-          <h2 className='text-2xl sm:text-3xl font-bold text-center text-purple-800 mb-2'>Purchase Successful!</h2>
+          <h2 className='text-xl sm:text-3xl font-bold text-center text-purple-800 mb-2'>Purchase Successful!</h2>
           <p className='text-center mb-2  text-purple-900'>Thanks for the purchase, {"We're"} processing it now</p>
           <p className='text-center mb-2 text-sm  text-pink-900'>Check your email for order details and updates</p>
-          <div className='bg-purple-300 rounded-lg p-4 mb-6'>
-            <div className='flex items-center justify-between mb-2'>
-              <span className='text-sm text-pink-900'>Order number:</span>
-              <span className='text-sm font-bold text-purple-900'>#Tr_{id}</span>
+          <div className='bg-purple-300 rounded-lg py-3 px-2 sm:p-4 mb-6'>
+            <div className='flex flex-wrap items-center justify-between mb-2'>
+              <span className='text-[12px] sm:text-sm text-pink-900'>Order number:</span>
+              <span className='text-[12px] sm:text-sm font-bold text-purple-900 text-wrap'>#Tr_{id}</span>
             </div>
             <div className='flex items-center justify-between mb-2'>
-              <span className='text-sm text-pink-900'>Estimated delivery:</span>
-              <span className='text-sm font-bold text-purple-900'>3-5 business days</span>
+              <span className='text-[12px] sm:text-sm text-pink-900'>Estimated delivery:</span>
+              <span className='text-[12px] sm:text-sm font-bold text-purple-900'>3-5 business days</span>
             </div>
           </div>
           <div className='space-y-4'>

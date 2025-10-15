@@ -4,22 +4,37 @@ import React, { useEffect } from 'react'
 import { Link } from 'react-router'
 
 import { useProductStore } from '../store/productStore.js'
+import { useState } from 'react'
+import axios from 'axios'
 
 const ProductList = () =>{
-  const { toggleFeaturedProducts, deleteProduct, products, fetchAllProducts, toggleOfferProducts } = useProductStore()
+  const [products, setProducts] = useState([])
+  const { toggleFeaturedProducts, deleteProduct, toggleOfferProducts } = useProductStore()
+
+
+
   
 
   useEffect(() => {
-  
-      fetchAllProducts()
+    const fetchListProducts = async() =>{
+      try {
+        const res = await axios.get('/api/product/lis')
+        setProducts(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    } 
+      
+    
+    fetchListProducts()
     
   
-    }, [fetchAllProducts])
+    }, [])
   
   
   return(
   
-    <div className="w-full h-screen self-center font-[Merienda] relative  overflow-x-auto">
+    <div className="w-full min-h-screen self-center font-[Merienda] relative  overflow-x-auto [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-pink-200 border-2 border-pink-800 [&::-webkit-scrollbar-thumb]:bg-pink-700 ">
 
       <table  className=" table-auto border-spacing-x-1 sm:w-[500px] md:w-full divide-y divide-pink-900 ">
         <thead className="bg-pink-600 text-nowrap ">

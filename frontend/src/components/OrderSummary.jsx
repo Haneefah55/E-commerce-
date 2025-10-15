@@ -6,7 +6,6 @@ import { useEffect } from 'react'
 import { useAuthStore } from '../store/userStore.js'
 
 
-
 const OrderSummary = () => {
 
   const { total, subtotal, coupon, isCouponApplied, calculateTotals, applyCoupon, isLoading, discountPercent } = useCartStore()

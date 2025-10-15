@@ -6,6 +6,8 @@ export const generateToken = (userId) =>{
   const accessToken = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
   
   const refreshToken = jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" })
+
+  console.log('token generated')
   
   
   return { accessToken, refreshToken }
@@ -48,7 +50,8 @@ export const getStoredToken = async(req, res) =>{
   const refreshToken = req.cookies.refresh_token
   
     if(!refreshToken){
-      return res.status(400).json({ message: "No refresh token" })
+      throw new Error("No refresh token");
+      
     }
     
   const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
@@ -62,12 +65,7 @@ export const getStoredToken = async(req, res) =>{
  
   const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
   
-  res.cookie("access_token", accessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-    maxAge: 15 * 60 * 1000,
-  })
+  return accessToken
   
   
 }

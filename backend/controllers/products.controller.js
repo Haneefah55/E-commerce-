@@ -2,13 +2,27 @@ import mongoose from 'mongoose'
 import Product from '../models/products.model.js'
 import User from '../models/user.model.js'
 import cloudinary from '../utils/cloudinary.js'
+import Review from '../models/review.model.js'
 
 
-
-export const getAllProducts = async(req, res) =>{
+export const getListProduct = async(req, res) =>{
   
   try {
     const products = await Product.find({})
+      //console.log(products)
+    res.json(products)
+  
+  } catch (error) {
+    console.error("Error in getListProduct contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
+  
+  
+}
+export const getAllProducts = async(req, res) =>{
+  
+  try {
+    const products = await Product.find({ isOffer: false })
       //console.log(products)
     res.json(products)
   
@@ -26,6 +40,8 @@ export const getProduct = async (req, res) =>{
     const { id } = req.params
 
     const product = await Product.findById(id)
+    
+
     res.status(200).json(product)
     
 
@@ -38,7 +54,7 @@ export const getProduct = async (req, res) =>{
  
 export const getFeaturedProducts = async(req, res) =>{
   try {
-    const featuredProduct = await Product.find({ isFeatured: true })
+    const featuredProduct = await Product.find({ isFeatured: true, isOffer: false })
     if(!featuredProduct){
       return res.status(404).json({ message: "No Featured Products found" })
     }
@@ -51,6 +67,28 @@ export const getFeaturedProducts = async(req, res) =>{
   
 }
 
+export const searchProduct = async(req, res) => {
+  try {
+    const { filter } = req.query
+
+    if(!filter){
+      return res.status(400).json({ message: "Search filter is required"})
+    }
+
+    const search = await Product.find({
+      $or: [
+        { name: { $regex: filter, $options: "i" } },
+        { category: { $regex: filter, $options: "i" } }
+      ]
+    })
+
+
+    res.json(search)
+  } catch (error) {
+    console.error("Error in search product contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
+}
 
 export const getOfferProducts = async(req, res) =>{
   try {
@@ -62,7 +100,7 @@ export const getOfferProducts = async(req, res) =>{
     const discount = 20
 
     const discountedProducts = offerProduct.map((product) => {
-      const discountedPrice = product.price * (1 - discount / 100)
+      const discountedPrice = Math.floor(product.price * (1 - discount / 100))
 
       return {
         ...product._doc,
@@ -232,77 +270,6 @@ export const toggleOfferProducts = async(req, res) =>{
   }
 }
 
-export const getWishlist = async (req, res) =>{
-
-  try {
-
-    //const id = req.user._id
-
-    const user = await User.findById(req.user._id).populate("wishlist")
-
-    if(!user){
-      return res.status(404).json({ message: "user not found" })
-    }
-
-    return res.json(user.wishlist)
-  } catch (error) {
-    console.error("Error in getWishlist contoller", error.message);
-    res.status(500).json({ message: error.message })
-  }
-  
-
-}
-
-export const toggleProductToWishlist = async (req, res) =>{
-
-  try {
-
-    const productId = req.params.id
-    const id = req.user._id
-
-    const user = await User.findById(id).select("-password")
-
-    if(!user){
-      return res.status(404).json({ message: "user not found" })
-    }
-
-    const product = await Product.findById(productId)
-    if(!product){
-      return res.status(404).json({ message: "Products not found" })
-    }
-   
-
-    const index = user.wishlist.find((item) => item.id === productId)
-
-    //console.log("index", index)
-
-    if(index){
-
-      user.wishlist = user.wishlist.filter((item) => item._id.toString() !== productId)
-      
-     
-    } else {
-      user.wishlist.push(productId)
-     
-      
-    }
-
-    await user.save()
-    await user.populate("wishlist")
-
-  
-
-    res.json(user.wishlist)
-  
-    
-
-  } catch (error) {
-    console.error("Error in toggleProductToWishlist contoller", error.message);
-    res.status(500).json({ message: error.message })
-  }
- 
-}
-
 
 export const updateProduct = async(req, res) =>{
 
@@ -361,6 +328,165 @@ export const updateProduct = async(req, res) =>{
     console.error("Error in updateProduct contoller", error.message);
     res.status(500).json({ message: error.message })
   }
+}
+
+
+export const createProductReview = async(req, res) =>{
+
+  try {
+    const { comment, ratings } = req.body
+ 
+    const { id } = req.params
+
+    const user = await User.findById(req.user._id)
+    
+    if(!user){
+      return res.status(404).json({ message: "User not found" })
+    }
+ /**
+    const userExist = await Product.find({ 
+      "_id": id,
+      "review": {
+        "$elemMatch": {
+          "user_id": id
+        }
+      }
+    })
+
+    */
+
+  
+
+    const product = await Product.findById(id)
+
+    if(!product){
+      return res.status(404).json({ message: "Product not found" })
+    }
+
+    const newReview ={
+      user: user._id,
+      name: user.name,
+      comment,
+      ratings,
+    }
+
+    product.review.push(newReview)
+
+    await product.save()
+
+    console.log("product review created successfully")
+
+    res.json(product.review)
+  } catch (error) {
+    
+    console.error("Error in createProductReview contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
+  
+
+
+  
+
+  
+}
+
+export const getProductReview = async(req, res) =>{
+  try {
+    const { id } = req.params
+    console.log(id)
+
+    const productReviews = await Product.findOne(
+      { _id: id },
+      { review: 1, _id: 0 }
+    )
+
+    const totalReviews = await Product.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId.createFromHexString(id)
+        }
+      }, 
+      
+      {
+        $project: {
+          name: 1,
+          review: { $size: "$review" }, 
+          _id: 0
+        }
+
+      }
+    ])
+
+    const { review } = totalReviews[0] ||  0 
+
+
+    const productRatings = await Product.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId.createFromHexString(id)
+        }
+      }, 
+      
+      {
+        $project: {
+          _id: 0,
+          totalRatings: { $size: "$review" }, 
+          averageRating: { $avg: "$review.ratings" }
+        }
+
+      }
+    ])
+
+    const { totalRatings, averageRating } = productRatings[0] || { totalRatings: 0, averageRating: 0 }
+
+    res.json({ totalRatings, averageRating, review, productReviews  })
+  } catch (error) {
+    console.error("Error in getProductReview contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export const getRelatedProducts = async(req, res) =>{
+
+  try {
+    const { category } = req.params
+
+    const product = await Product.find({ category: category }).limit(3)
+
+    //console.log("category", product)
+
+    res.json(product)
+  } catch (error) {
+    console.error("Error in getRelatedProducts contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export const categoryCount = async(req, res) =>{
+  try {
+
+    const product = await Product.aggregate([
+      {
+        $unwind: "$category"
+      },
+      {
+        $group: {
+          "_id": "$category",
+          "count": { "$sum": 1}
+        }
+      }
+    ])
+
+    //console.log(product)
+    res.json(product)
+  } catch (error) {
+    console.error("Error in categorycount contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
+}
+
+export const reduceStock = async(req, res) =>{
+
 }
 
 

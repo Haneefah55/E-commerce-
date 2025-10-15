@@ -17,7 +17,10 @@ export const getCoupon = async(req, res) =>{
   
   try {
     const coupon = await Coupon.findOne({ user: req.user._id, isActive: true })
-    //console.log(coupon.code)
+    if(!coupon) {
+      return res.status(404).json({ message: "coupon not found" })
+    }
+    console.log(coupon.code)
     res.json({ coupon: coupon.code, discountPercent: coupon.discountPercent })
   } catch (error) {
     console.error("Error in getCoupon contoller", error.message);
@@ -76,7 +79,7 @@ export const createCoupon = async(req, res)=>{
       user: user._id
     })
 
-   // console.log(newCoupon)
+    console.log("coupon created successfully")
     res.json({
       coupon: newCoupon.code,
       discountPercent: newCoupon.discountPercent,
@@ -84,9 +87,6 @@ export const createCoupon = async(req, res)=>{
 
     })
     
-    
-    
-  
     
   
     

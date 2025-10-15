@@ -47,9 +47,9 @@ const userSchema = new mongoose.Schema({
   ],
 
   shippingAddress: {
-    street: { type: String, required: true },
-    city:    { type: String, required: true },
-    state:   { type: String, require: true, },
+    street: { type: String },
+    city:    { type: String },
+    state:   { type: String },
     phoneNo: { type: Number },
     zipCode: { type: String },
   },
@@ -59,6 +59,13 @@ const userSchema = new mongoose.Schema({
     enum: ["customer", "admin"],
     default: "customer"
   },
+
+  review: {
+    
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Review",
+    
+  }
 
 }, { timestamps: true })
 

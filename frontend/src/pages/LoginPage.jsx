@@ -103,7 +103,7 @@ const LoginPage = () =>{
                 <button
                   className="w-full py-2 px-5 mt-5 bg-gradient-to-r from-purple-500 to-fuchsia-400 text-gray-200 font-semibold transform transition hover:scale-90 duration-200"
                   type= "submit"
-                  diabled={isLoading}
+                  diabled={isLoading ? "true" : "false"}
               
                 >            
                   { isLoading ? <Loader className=" animate-spin mx-auto" size={24} /> : "Login"}

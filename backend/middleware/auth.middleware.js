@@ -8,15 +8,12 @@ export const protectRoute = async(req, res, next) =>{
     
     const accessToken = req.cookies.access_token
      if(!accessToken){
-       return res.status(400).json({ message: "Unauthorized" })
+       return res.status(401).json({ message: "Unauthorized" })
      }
      
      const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET)
      const user = await User.findById(decoded.userId).select("-password")
      
-     if(!user){
-       return res.status(400).json({ message: "Unauthorized user, login to continue" })
-     }
      
      req.user = user
      next()
@@ -37,7 +34,7 @@ export const adminRoute = async(req, res, next) =>{
     
     next()
   } else{
-    return res.status(400).json({ message: "Unauthorized user: Admin route" })
+    return res.json({ message: "Unauthorized user: Admin route" })
   }
   
 }

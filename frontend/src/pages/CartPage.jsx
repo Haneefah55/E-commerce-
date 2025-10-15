@@ -12,6 +12,8 @@ const CartPage = () => {
   const { cart, calculateTotals, getCoupon } = useCartStore()
   const { fetchRecommendedProducts } = useProductStore()
 
+  console.log("cart", cart)
+
   //console.log("recommend", recommendedProducts)
 
 

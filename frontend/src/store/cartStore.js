@@ -103,20 +103,25 @@ export const useCartStore = create((set, get) => ({
 
     try {
 
-      get().getCoupon()
+      
       const { cart, coupon, discountPercent, isCouponApplied } = get()
+      console.log("coupon", coupon)
+
+      
 
       const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
-
-      let total = subtotal
+      console.log(subtotal)
 
       if(subtotal > 50000 && !coupon){
         get().createCoupon()
       } 
 
+      let total = subtotal
+      
+
       if(coupon && isCouponApplied) {
-      const discount = subtotal * (discountPercent / 100)
-      total = subtotal - discount
+        const discount = subtotal * (discountPercent / 100)
+        total = subtotal - discount
       }
       console.log(total, coupon, subtotal)
 
@@ -133,7 +138,8 @@ export const useCartStore = create((set, get) => ({
 
     try {
 
-      const response = await axios.get('/api/coupon')
+      const response = await axios.post('/api/coupon/create')
+      console.log("create coupon res", response.data)
       set({ coupon: response.data.code, discountPercent: response.data.discountPercent })
 
     } catch (error) {
@@ -194,20 +200,16 @@ export const useCartStore = create((set, get) => ({
   **/
 
   initializePayment: async() =>{
-
-    
     
     set({ isLoading: true })
     
-
     try {
       
-
       const { total, coupon } = get()
 
       if(total <= 0) throw new Error("amount is 0");
   
-      if(coupon === null) throw new Error("no coupon found")
+      //if(coupon === null) throw new Error("no coupon found")
 
       const amount = total
       
@@ -221,7 +223,7 @@ export const useCartStore = create((set, get) => ({
       
       const response = await axios.post('/api/payment/initialize', { amount, coupon })
 
-      console.log("initialize response", response)
+      //console.log("initialize response", response)
 
       const data = response.data
       if(!data.reference) throw new Error("no reference returned");

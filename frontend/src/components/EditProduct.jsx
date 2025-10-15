@@ -103,7 +103,7 @@ const EditProduct = () => {
             value={name}
             onChange={(e) => (setName(e.target.value))}
             
-            className="w-full p-2 bg-white/30 bg-opacity-50 rounded-md border-2 border-pink-400 outline-none focus:border-pink-600 text-gray-700 placeholderé:text-gray-400 transition duration-200"
+            className="w-full p-2 bg-white/30 bg-opacity-50 rounded-md border-2 border-pink-400 outline-none focus:border-pink-600 text-gray-700 placeholder:text-gray-400 transition duration-200"
                       
           />
           

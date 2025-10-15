@@ -1,10 +1,12 @@
 
 import react, { useState } from 'react'
-import { Lock, User, Mail, EyeOff, Eye, Loader } from 'lucide-react'
+import { Lock, User, Mail, EyeOff, Eye, Loader, CheckCircle, HandHeart  } from 'lucide-react'
 import { Link } from 'react-router'
 import { useNavigate } from 'react-router'
 import logo from '/images/logo1.png'
 import { useAuthStore } from '../store/userStore.js'
+
+import Confetti from 'react-confetti'
 
 const SignUpPage = () =>{
   const [name, setName] = useState("")
@@ -14,6 +16,7 @@ const SignUpPage = () =>{
   const [isVisible, setIsVisible] = useState(false)
   
   const navigate = useNavigate()
+  const [isCreated, setIsCreated] = useState(false)
   
   const { signup, isLoading } = useAuthStore()
   
@@ -29,10 +32,13 @@ const SignUpPage = () =>{
 
     try {
       await signup(name, email, password)
+
+      setIsCreated(true)
       
-      navigate("/account-created")
+      
     } catch (error) {
       console.error(error);
+      setIsCreated(false)
     }
     
     
@@ -42,10 +48,10 @@ const SignUpPage = () =>{
   return(
   
     <div className="h-screen w-screen flex items-center justify-center bg-no-repeat bg-center relative"
-      style={{ backgroundImage: "url('/images/signup.jpg')", backgroundSize: 'cover' }}
+      style={{ backgroundImage: `url(${isCreated ? "" : "/images/signup.jpg"})`, backgroundSize: 'cover' }}
     >
       
-      <div className="flex items-center justify-center bg-gray-950/40 absolute p-2 inset-0">
+      <div className={` ${isCreated ? "hidden" : "flex"} items-center justify-center bg-gray-950/40 absolute p-2 inset-0`}>
         <div className="">
           <div className="flex flex-col items-center justify-center ">
             <h2 className="font-bello text-4xl text-center bg-white/60 text-transparent bg-clip-text font-bold">Welcome to</h2>
@@ -139,6 +145,8 @@ const SignUpPage = () =>{
         
         
       </div>
+
+      {isCreated && <AccountCreated />}
     
   
       
@@ -148,4 +156,45 @@ const SignUpPage = () =>{
 }
 
 export default SignUpPage
-  
+
+
+const AccountCreated = () =>(
+  <div className='absolut inset-0 h-screen w-screen flex items-center font-[Merienda] justify-center px-4'
+    >
+
+    <Confetti
+
+      width={window.innerWidth}
+      height={window.innerHeight}
+      gravity={0.1}
+      style={{ zIndex: 99 }}
+      numberOfPieces={800}
+      recycle={false}
+
+    />
+    <div className='max-w-md w-full bg-pink-200 rounded-lg shadow-xl overflow-hidden relative' >
+      <div className='p-5 sm:p-6'>
+        <div className='flex justify-center'>
+          <CheckCircle className='text-purple-800 w-16 h-16 mb-4'/>
+
+        </div>
+
+        <h2 className='text-2xl font-bold text-center text-purple-800 mb-3'>Account Created Successful!</h2>
+        <p className='text-center mb-3 text-sm text-pink-800'>Your account has been created successfully<br />Please Login to continue</p>
+
+        <div className='space-y-4'>
+          <button className='w-full bg-purple-950 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded-lg transitions duration-300 flex items-center justify-center gap-2'>
+            <HandHeart />
+            Thanks for joining us!
+          </button>
+          <Link to='/login' className='w-full bg-pink-800 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transitions duration-300 flex items-center gap-2 justify-center '>
+            Login
+          
+          </Link>
+        </div>
+      </div>
+      
+    </div>
+      
+  </div>
+)

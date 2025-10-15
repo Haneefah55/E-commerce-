@@ -13,14 +13,18 @@ const Carousel = () =>{
     
     {
       url: img1,
+      title: "Unconventional Treats, Unforgetable Flavours!",
+
       
     },
     {
       url: img2,
+      title: "Indulge in Sweet Perfection",
       
     },
     {
       url: img3,
+      title: "Life is Sweet with Treats",
       
     },
   
@@ -60,11 +64,11 @@ const Carousel = () =>{
             
           <img src={welcome} alt="welcome to treats" className="w-[200px] "/>
             
-          <p className=" text-md mt-5 text-center text-gray-100 ">
-              Unconventional Treats, Unforgetable Flavours.<br /> Your Happy Place Awaits!
+          <p className=" text-xs md:text-lg mt-5 text-center text-gray-100 ">
+              {slides[currentIndex].title}
           </p>
 
-          <Link to={'/shop'} className='bg-pink-600 text-white transition-colors hover:bg-transparent hover:border-white hover:border-2 p-3 hover:text-white transition-transform hover:translate-x-3 rounded-md  mt-4 '>Shop Now</Link>
+          <Link to={'/shop'} className='bg-pink-600 text-white transition-colors hover:bg-transparent hover:border-white hover:border-2 p-2 md:p-3 text-sm md:text-xl hover:text-white transition-transform hover:translate-x-3 rounded-md  mt-4 '>Shop Now</Link>
             
             
         </div>
