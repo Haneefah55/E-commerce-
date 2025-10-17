@@ -58,7 +58,7 @@ const OrderPage = () => {
   return (
     <div className='bg-pink-100 font-[Merienda] w-screen min-h-screen py-20'>
       <div className='flex flex-col items-center justify-center mx-auto px-4 md:px-8 '>
-        <h3 className='text-3xl text-pink-800 font-bello mb-6'>My Orders</h3>
+        <h3 className='text-5xl text-pink-800 font-bello mb-6'>My Orders</h3>
 
         { orders.length === 0 
           ? ( <EmptyOrderUI />) 

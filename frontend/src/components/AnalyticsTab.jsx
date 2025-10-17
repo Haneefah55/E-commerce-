@@ -89,7 +89,7 @@ const AnalyticsTab = ()=>{
 
           <div className="flex justify-between items-center">
             <div className="z-10">
-              <p className="text-purple-400 text-sm mb-1 font-semibold">Total Revenue</p>
+              <p className="text-pink-200 text-sm mb-1 font-semibold">Total Revenue</p>
               <h3 className="text-white  text-2xl font-bold">&#8358; {analyticsData.totalRevenue.toLocaleString()}</h3>
             </div>
             
@@ -155,17 +155,17 @@ export default AnalyticsTab
 
 
 const AnalyticsCard = ({ title, value, icon: Icon, color }) =>(
-  <div className={` rounded-lg shadow-lg relative font-[Merienda] overflow-hidden p-6 ${color}`}>
+  <div className={` rounded-lg shadow-lg relative font-[Merienda] overflow-hidden p-6 bg-pink-600`}>
 
     <div className="flex justify-between items-center">
       <div className="z-10">
-        <p className="text-purple-400 text-sm mb-1 font-semibold">{title}</p>
+        <p className="text-pink-200 text-sm mb-1 font-bold">{title}</p>
         <h3 className="text-white text-2xl font-bold">{value}</h3>
       </div>
       
     </div>
     <div>
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-pink-800"/>
+      <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-pink-700"/>
       <div className="absolute -bottom-4 -right-4 text-pink-900 opacity-50">
         <Icon className="h-32 w-32" />
 

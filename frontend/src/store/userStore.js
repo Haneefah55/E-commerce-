@@ -342,7 +342,7 @@ axios.interceptors.response.use(
 
           //if refresh failed logout user
 
-          useAuthStore.getState().logout()
+          //useAuthStore.getState().logout()
 
           return Promise.reject(refreshError)
           

@@ -343,20 +343,9 @@ export const createProductReview = async(req, res) =>{
     if(!user){
       return res.status(404).json({ message: "User not found" })
     }
- /**
-    const userExist = await Product.find({ 
-      "_id": id,
-      "review": {
-        "$elemMatch": {
-          "user_id": id
-        }
-      }
-    })
-
-    */
+ 
 
   
-
     const product = await Product.findById(id)
 
     if(!product){
@@ -485,9 +474,6 @@ export const categoryCount = async(req, res) =>{
   }
 }
 
-export const reduceStock = async(req, res) =>{
-
-}
 
 
 

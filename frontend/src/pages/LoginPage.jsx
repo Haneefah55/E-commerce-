@@ -45,7 +45,7 @@ const LoginPage = () =>{
       <div className="flex items-center justify-center bg-gray-950/40 absolute inset-0">
         <div className="">
           <div className="flex flex-col gap-4 ">
-            <h2 className="font-bello text-4xl text-center bg-white/60 text-transparent bg-clip-text font-bold">Welcome to<br />Desserts</h2>
+            <h2 className="font-bello text-5xl text-center bg-white text-transparent bg-clip-text font-semibold">Welcome to<br />Treats</h2>
             
           </div>
           <div className="mt-10 flex flex-col items-center justify-center font-[Merienda]">

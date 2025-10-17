@@ -29,6 +29,26 @@ export const useReviewStore = create((set) => ({
 
   }, 
 
+  createCustomerReview: async(comment, ratings) =>{
+    set({ isLoading: true })
+
+    try {
+
+      
+      const res = await axios.post(`/api/review`, { comment, ratings })
+      console.log("create customer reviews response", res.data)
+
+      set((prevState) => ({ customerReviews: [...prevState.customerReviews, res.data ]}))
+
+      set({ isLoading: false })
+      toast.success("Customer's review was successfull")
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response?.data?.message)
+      set({ isLoading: false })
+    }
+  },
+
   getProductReview: async(id) =>{
 
     try {

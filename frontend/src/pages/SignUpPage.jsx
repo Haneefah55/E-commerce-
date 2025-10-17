@@ -54,8 +54,7 @@ const SignUpPage = () =>{
       <div className={` ${isCreated ? "hidden" : "flex"} items-center justify-center bg-gray-950/40 absolute p-2 inset-0`}>
         <div className="">
           <div className="flex flex-col items-center justify-center ">
-            <h2 className="font-bello text-4xl text-center bg-white/60 text-transparent bg-clip-text font-bold">Welcome to</h2>
-            <img src={logo} alt="logo" className="w-[120px]" />
+            <h2 className="font-bello text-5xl text-center bg-white text-transparent bg-clip-text font-semibold">Welcome to<br />Treats</h2>
             
           </div>
           <div className="mt-10 flex flex-col items-center justify-center font-[Merienda] ">

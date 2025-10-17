@@ -8,6 +8,7 @@ import TopDealItems from '../components/TopDealItems.jsx'
 import { useCartStore } from '../store/cartStore.js'
 import CustomerReviews from '../components/CustomerReviews.jsx'
 import { useReviewStore } from '../store/reviewStore.js'
+import toast from 'react-hot-toast'
 
 
 
@@ -18,6 +19,10 @@ const HomePage = () =>{
   const { getCartItems } = useCartStore()
 
   const { getCustomersReview, customerReviews } = useReviewStore()
+
+  const handleSubscribe = async() =>{
+    toast.success("Subscription successfull", { id: "subscribe" })
+  }
 
   //console.log("customerReviews", customerReviews)
 
@@ -49,10 +54,11 @@ const HomePage = () =>{
 
   return(
   
-    <main className="bg-pink-50">
+    <main className="bg-pink-50 ">
       <section className="w-full h-[500px]  mb-20 relative">
         <Carousel />
       </section>
+    
 
       <section className=' w-full font-[Merienda] mt-20 '>
         <div className='flex items-center justify-center flex-col relative '>
@@ -91,6 +97,37 @@ const HomePage = () =>{
       <FeaturedProducts featuredProducts={featuredProducts}  />
 
       <CustomerReviews reviews={customerReviews} />
+
+      <section className=' w-full font-[Merienda] mt-10' 
+        style={{ backgroundImage: "url('/images/news.jpg')", backgroundSize: 'cover' }}>
+        <div className='w-full flex bg-black/80 py-8 items-center justify-center px-4  text-pink-200 flex-col'>
+          <div className='w-full  flex items-center justify-center px-4 flex-col'>
+            <h2 className='font-bold text-3xl mb-4'>Stay in the loop!</h2>
+            <div className=' flex items-center justify-center flex-col md:flex-row'>
+
+              <p className='w-[280px] md:w-[380px]  mb-3'>Subscribe to our newsletter, stay updated on new exciting desserts, specials, and events.</p>
+              <div className=' flex flex-col '>
+                <input
+
+                  placeholder='Your email address'
+                  className='w-[250px] p-2 bg-white/30 placeholder:text-white my-3'
+
+                />
+                <button className='w-[150px] p-2 bg-pink-600 text-white' onClick={handleSubscribe}>Subscribe</button>
+              </div>
+
+              
+
+
+
+            </div>
+          </div>
+          
+          
+
+        </div>
+
+      </section>
 
       
       

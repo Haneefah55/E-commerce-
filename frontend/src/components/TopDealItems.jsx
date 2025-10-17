@@ -15,7 +15,7 @@ const TopDealItems = ({ offerProducts }) => {
   const { addToCart } = useCartStore()
 
   const discount = 20
-  console.log("offerProducts", offerProducts)
+  //console.log("offerProducts", offerProducts)
 
 
 

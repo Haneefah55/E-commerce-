@@ -3,7 +3,8 @@ import express from 'express'
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import sanitizeHtml from 'sanitize-html'
+
+import path from 'path'
 
 import { connectDb } from './db/connectDb.js'
 import authRoutes from './routes/auth.route.js'
@@ -23,6 +24,8 @@ const app = express()
 
 const Port = process.env.PORT || 5500
 
+const __dirname = path.resolve()
+
 app.use(express.json({ limit: '20mb' }))
 app.use(cookieParser())
 app.use(cors())
@@ -41,7 +44,13 @@ app.use('/api/review', reviewRoutes)
 
 app.post('/test', test)
 
+if(process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/frontend/dist")))
 
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
+  })
+}
 
 
 app.listen(Port, () =>{

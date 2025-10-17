@@ -18,12 +18,12 @@ const WishlistPage = () => {
   return (
     <div className='bg-pink-100 font-[Merienda] w-screen min-h-screen py-20'>
       <div className='flex flex-col items-center justify-center mx-auto my-10 px-4 md:px-8 '>
-        <h3 className='text-3xl text-pink-800 font-bello mb-6'>My Wishlist</h3>
+        <h3 className='text-5xl text-pink-800 font-bello mb-6'>My Wishlist</h3>
 
         { wishlist?.length === 0 
           ? ( <EmptyOrderUI />) 
           : (
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap6'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
 
               {wishlist?.map((list) =>(
               <ProductCard product={list} key={list.name} />

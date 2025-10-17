@@ -34,7 +34,7 @@ const CartPage = () => {
 
   return (
     <div className='bg-pink-100 w-full min-h-screen pt-14 px-1 md:px-6 '>
-      <h2 className='font-semibold font-bello text-2xl text-pink-600 mb-10 mt-10 text-center'>My Cart</h2>
+      <h2 className='font-semibold font-bello text-5xl text-pink-600 mb-10 mt-10 text-center'>My Cart</h2>
 
       { cart.length === 0 
         ? ( <EmptyCartUI />) 

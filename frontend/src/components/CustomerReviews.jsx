@@ -51,18 +51,19 @@ const CustomerReviews = ({ reviews }) => {
 
   }, [])
   
+
   return (
-    <div  className='py-5 w-full max-w-5xl mx-auto flex items-center justify-center'>
+    <div  className='pt-5 w-full pb-10 max-w-4xl mx-auto'>
       <div className=' container px-5 md:px-4  '>
         <h3 className="p-2 w-fit text-purple-800 ml-2 font-[Merienda] pb-4 border-b-4 border-b-pink-600 font-semibold mb-4 text-sm md:text-xl">Sweat Words From Our Customers</h3>
         <div className='relative group'>
-          <div className='overflow-hidden mx-auto'>
-            <div className='flex gap-6 items-center justify-center transition-transform duration-300 ease-in-out'
+          <div className=' overflow-hidden mx-auto'>
+            <div className='flex gap-6 transition-transform duration-300 ease-in-out'
               style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
             
             >
               {reviews?.map((review) => (
-                <div  className='w-[280px] h-[300px] flex-shrink-0 relative  bg-gray-100 shadow-lg flex flex-col overflow-hidden  p-2 cursor-pointer font-[Merienda] items-center justify-center rounded-lg'
+                <div  className='w-[270px] h-[300px] flex-shrink-0 relative  bg-gray-200 shadow-lg flex flex-col overflow-hidden  p-2 cursor-pointer font-[Merienda] items-center justify-center rounded-lg'
                   key={review._id} 
                 
                 >
@@ -81,7 +82,7 @@ const CustomerReviews = ({ reviews }) => {
                   </div>
 
                   <p className='text-center text-sm py-3 font-semibold text-purple-800'>{review?.comment}</p>
-                  <p className='font-bold capitalize text-center text-pink-800'>{review?.name}</p>
+                  <p className='font-bold capitalize text-center mb-7 text-pink-800'>{review?.name}</p>
                   
                  
                   

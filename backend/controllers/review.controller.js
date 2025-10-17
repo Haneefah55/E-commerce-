@@ -12,6 +12,10 @@ export const createReview = async(req, res) =>{
     if(!user){
       return res.status(404).json({ message: "User not found" })
     }
+    const reviewExist = await Review.findOne({ user: user._id })
+    if(reviewExist) {
+      return res.status(400).json({ message: "User review exist " })
+    }
 
     const review = await Review.create({
       user: user._id,
