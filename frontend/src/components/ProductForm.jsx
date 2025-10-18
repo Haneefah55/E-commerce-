@@ -39,7 +39,7 @@ const ProductForm = () =>{
 
     try {
       await createProduct(productData)
-      window.location.reload()
+      
     } catch (error) {
       console.log(error)
     }
