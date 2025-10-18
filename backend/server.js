@@ -27,9 +27,9 @@ const app = express()
 
 const Port = process.env.PORT || 5500
 
-const __filname = fileURLToPath(import.meta.url)
-//const __dirname = path.resolve()
-const __dirname = path.dirname(__filname)
+//const __filname = fileURLToPath(import.meta.url)
+const __dirname = path.resolve()
+//const __dirname = path.dirname(__filname)
 
 app.use(express.json({ limit: '20mb' }))
 app.use(cookieParser())
@@ -51,12 +51,12 @@ app.post('/test', test)
 
 if(process.env.NODE_ENV === "production") {
 
-  const frontendPath = path.join(__dirname, "frontend", "dist")
- // app.use(express.static(path.join(__dirname, "/frontend/dist")))
-  app.use(express.static(frontendPath))
+  //const frontendPath = path.join(__dirname, "frontend", "dist")
+  app.use(express.static(path.join(__dirname, "/frontend/dist")))
+  //app.use(express.static(frontendPath))
 
   app.get(/^\/(?!api).*/, (req, res) => {
-    res.sendFile(path.resolve(frontendPath, "index.html"))
+    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
   })
 }
 
