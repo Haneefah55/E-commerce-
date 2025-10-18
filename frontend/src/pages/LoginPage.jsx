@@ -39,7 +39,7 @@ const LoginPage = () =>{
   return(
   
     <div className="h-screen w-screen flex items-center justify-center bg-no-repeat bg-center relative"
-      style={{ backgroundImage: "url('/images/signup.jpg')", backgroundSize: 'cover' }}
+      style={{ backgroundImage: "url('https://res.cloudinary.com/dnhttlxgv/image/upload/v1760784538/signup_bueyyc.jpg')", backgroundSize: 'cover' }}
     >
       
       <div className="flex items-center justify-center bg-gray-950/40 absolute inset-0">

@@ -99,7 +99,7 @@ const HomePage = () =>{
       <CustomerReviews reviews={customerReviews} />
 
       <section className=' w-full font-[Merienda] mt-10' 
-        style={{ backgroundImage: "url('/images/news.jpg')", backgroundSize: 'cover' }}>
+        style={{ backgroundImage: "url('https://res.cloudinary.com/dnhttlxgv/image/upload/v1760784353/news_zpjuqo.jpg')", backgroundSize: 'cover' }}>
         <div className='w-full flex bg-black/80 py-8 items-center justify-center px-4  text-pink-200 flex-col'>
           <div className='w-full  flex items-center justify-center px-4 flex-col'>
             <h2 className='font-bold text-3xl mb-4'>Stay in the loop!</h2>

@@ -1,7 +1,5 @@
 import { Link } from 'react-router'
-import img1 from '/images/slide1.jpg'
-import img2 from '/images/slide2.jpg'
-import img3 from '/images/slide3.jpg'
+
 import welcome from '/images/welcome.png'
 
 import React, { useState, useEffect } from 'react'
@@ -12,18 +10,18 @@ const Carousel = () =>{
   const slides = [
     
     {
-      url: img1,
+      url: "https://res.cloudinary.com/dnhttlxgv/image/upload/v1760784264/slide1_cglkf2.jpg",
       title: "Unconventional Treats, Unforgetable Flavours!",
 
       
     },
     {
-      url: img2,
+      url: "https://res.cloudinary.com/dnhttlxgv/image/upload/v1760784277/slide2_iitl9i.jpg",
       title: "Indulge in Sweet Perfection",
       
     },
     {
-      url: img3,
+      url: "https://res.cloudinary.com/dnhttlxgv/image/upload/v1760784301/slide3_zjzhwm.jpg",
       title: "Life is Sweet with Treats",
       
     },
@@ -68,7 +66,7 @@ const Carousel = () =>{
               {slides[currentIndex].title}
           </p>
 
-          <Link to={'/shop'} className='bg-pink-600 text-white transition-colors hover:bg-transparent hover:border-white hover:border-2 p-2 md:p-3 text-sm md:text-xl hover:text-white transition-transform hover:translate-x-3 rounded-md  mt-4 '>Shop Now</Link>
+          <Link to={'/shop'} className='bg-pink-600 text-white hover:bg-transparent hover:border-white hover:border-2 p-2 md:p-3 text-sm md:text-xl hover:text-white transition hover:translate-x-3 rounded-md  mt-4 '>Shop Now</Link>
             
             
         </div>

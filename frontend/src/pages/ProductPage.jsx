@@ -155,7 +155,7 @@ const ProductPage = () => {
 
   return (
     <div className='w-screen min-h-screen'>
-      <div className='w-full h-[400px] flex bg-center relative bg-cover ' style={{ backgroundImage: `url(${bg})`}}>
+      <div className='w-full h-[400px] flex bg-center relative bg-cover ' style={{ backgroundImage: `url("https://res.cloudinary.com/dnhttlxgv/image/upload/v1760784326/rain_ztqfii.jpg")`}}>
         <div className='absolute inset-0 flex flex-col items-center justify-end'>
         <h3 className='text-2xl mt-10 font-bold mb-4 capitalize font-[Merienda] '>{product?.name}</h3>
 
