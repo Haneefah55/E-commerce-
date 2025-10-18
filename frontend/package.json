@@ -17,6 +17,7 @@
     "@fortawesome/react-fontawesome": "^3.0.2",
     "@paystack/inline-js": "^2.22.7",
     "axios": "^1.11.0",
+    "ecommerce": "file:..",
     "lucide-react": "^0.536.0",
     "react": "^19.1.0",
     "react-confetti": "^6.4.0",
