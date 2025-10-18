@@ -12,6 +12,8 @@ export const useProductStore = create((set) => ({
   featuredProducts: [],
   offerProducts: [],
   relatedProduct: [],
+  
+  
 
   setProducts: (products) => set({ products }),
 
@@ -33,6 +35,7 @@ export const useProductStore = create((set) => ({
       throw error
     }
   },
+
 
   fetchAllProducts: async() =>{
 

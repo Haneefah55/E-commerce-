@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { getAllProducts, getFeaturedProducts, createProduct, deleteProduct, getRecommendedProducts, getProductByCategory, toggleFeaturedProducts, updateProduct, getProduct, getOfferProducts, toggleOfferProducts, getRelatedProducts, categoryCount, searchProduct, getListProduct } from '../controllers/products.controller.js'
+import { getAllProducts, getFeaturedProducts, createProduct, deleteProduct, getRecommendedProducts, getProductByCategory, toggleFeaturedProducts, updateProduct, getProduct, getOfferProducts, toggleOfferProducts, getRelatedProducts, categoryCount, searchProduct } from '../controllers/products.controller.js'
 import { protectRoute, adminRoute } from '../middleware/auth.middleware.js'
 
 
@@ -11,7 +11,7 @@ const router = express.Router()
 
 router.get("/", getAllProducts)
 
-router.get("/list", getListProduct)
+
 
 router.get("/featured", getFeaturedProducts)
 router.get("/offer", getOfferProducts)

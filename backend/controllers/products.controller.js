@@ -5,24 +5,11 @@ import cloudinary from '../utils/cloudinary.js'
 import Review from '../models/review.model.js'
 
 
-export const getListProduct = async(req, res) =>{
-  
-  try {
-    const products = await Product.find({})
-      //console.log(products)
-    res.json(products)
-  
-  } catch (error) {
-    console.error("Error in getListProduct contoller", error.message);
-    res.status(500).json({ message: error.message })
-  }
-  
-  
-}
+
 export const getAllProducts = async(req, res) =>{
   
   try {
-    const products = await Product.find({ isOffer: false })
+    const products = await Product.find({})
       //console.log(products)
     res.json(products)
   
