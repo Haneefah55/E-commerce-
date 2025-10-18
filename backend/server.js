@@ -4,6 +4,8 @@ import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 
+
+
 import path from 'path'
 
 import { connectDb } from './db/connectDb.js'
@@ -16,6 +18,7 @@ import couponRoutes from './routes/coupon.route.js'
 import reviewRoutes from './routes/review.routes.js'
 import { sanitizer } from './middleware/sanitizer.js'
 import { test } from './test.js'
+import { fileURLToPath } from 'url'
 
 
 dotenv.config()
@@ -24,7 +27,9 @@ const app = express()
 
 const Port = process.env.PORT || 5500
 
-const __dirname = path.resolve()
+const __filname = fileURLToPath(import.meta.url)
+//const __dirname = path.resolve()
+const __dirname = path.dirname(__filname)
 
 app.use(express.json({ limit: '20mb' }))
 app.use(cookieParser())
@@ -45,10 +50,13 @@ app.use('/api/review', reviewRoutes)
 app.post('/test', test)
 
 if(process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/frontend/dist")))
+
+  const frontendPath = path.join(__dirname, "frontend", "dist")
+ // app.use(express.static(path.join(__dirname, "/frontend/dist")))
+  app.use(express.static(frontendPath))
 
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"))
+    res.sendFile(path.resolve(frontendPath, "index.html"))
   })
 }
 

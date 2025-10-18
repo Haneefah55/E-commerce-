@@ -104,7 +104,7 @@ const Navbar = () =>{
               
               <div className='w-7 h-7 ml-5 md:ml-9 bg-pink-600 text-white p-3 flex items-center justify-center rounded-full'>{user?.name?.charAt(0).toUpperCase()}</div>
               
-              <p className='hidden md:block md:ml-3 text-xl font-semibold text-pink-600 capitalize'>{user?.name}</p>
+              <p className='hidden max-w-[120px] truncate md:block md:ml-3 text-xl font-semibold text-pink-600 capitalize'>{user?.name}</p>
 
 
             </button>
