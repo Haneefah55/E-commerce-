@@ -41,7 +41,7 @@ export const getProduct = async (req, res) =>{
  
 export const getFeaturedProducts = async(req, res) =>{
   try {
-    const featuredProduct = await Product.find({ isFeatured: true, isOffer: false })
+    const featuredProduct = await Product.find({})
     if(!featuredProduct){
       return res.status(404).json({ message: "No Featured Products found" })
     }

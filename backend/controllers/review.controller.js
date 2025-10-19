@@ -38,7 +38,7 @@ export const createReview = async(req, res) =>{
 export const getReviews = async(req, res) =>{
 
   try {
-    const reviews = await Review.find({}).sort({ timestamp: -1 })
+    const reviews = await Review.find({}).sort({ timestamp: -1 }).limit(5)
 
     res.json(reviews)
   } catch (error) {

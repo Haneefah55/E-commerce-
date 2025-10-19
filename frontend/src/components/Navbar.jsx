@@ -130,7 +130,7 @@ const Navbar = () =>{
         }
 
         {/* Mobile dropdown nav**/}
-        <nav className={`md:hidden absolute ${menuOpen ? "-translate-x-3/5" : "translate-x-full"} top-[100%]  bg-pink-600/50 backdrop-blur-lg w-[300px] h-[300px] flex font-[Merienda] font-bold text-gray-100 p-5 gap-5 items-center flex-col transition transform duration-300 right-0 `} id='nav-menu'>
+        <nav className={`md:hidden absolute ${menuOpen ? "-translate-x-3/5" : "translate-x-full"} top-[100%]  bg-pink-600/50 backdrop-blur-lg w-[300px] h-screen flex font-[Merienda] font-bold text-gray-100 p-5 gap-5 items-center flex-col transition transform duration-300 right-0 `} id='nav-menu'>
           
           <button className="self-end" onClick={() => setMenuOpen(!menuOpen)} >
             <X className="w-8 h-8" />
@@ -148,7 +148,7 @@ const Navbar = () =>{
             <X className="w-8 h-8" />
           </button>
           
-          <Link to="/cart" className="hover:border-b-2 border-pink-200">Cart</Link>
+          <Link to="/user/cart" className="hover:border-b-2 border-pink-200">Cart</Link>
           <Link to="/user/order" className="hover:border-b-2 border-pink-200">Orders</Link>
           <Link to="/user/wishlist" className="hover:border-b-2 border-pink-200">Wishlist</Link>
           <Link to="/user/settings" className="hover:border-b-2 border-pink-200">Settings</Link>

@@ -57,7 +57,7 @@ const CustomerReviews = ({ reviews }) => {
       <div className=' container px-5 md:px-4  '>
         <h3 className="p-2 w-fit text-purple-800 ml-2 font-[Merienda] pb-4 border-b-4 border-b-pink-600 font-semibold mb-4 text-sm md:text-xl">Sweat Words From Our Customers</h3>
         <div className='relative group'>
-          <div className=' overflow-hidden mx-auto'>
+          <div className=' overflow-hidden mx-auto pl-5'>
             <div className='flex gap-6 transition-transform duration-300 ease-in-out'
               style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
             

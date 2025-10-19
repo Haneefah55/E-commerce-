@@ -310,15 +310,12 @@ export const useCartStore = create((set, get) => ({
  
       if(response.statusText === "OK"){
 
-        window.location.href = `/purchase-success/${id}`
+        window.location.href = `${process.env.CLIENT_URL}/purchase-success/${id}`
         console.log(response.status, response.statusText)
       }  else{
-        window.location.href = `/purchase-failed`
+        window.location.href = `${process.env.CLIENT_URL}/purchase-failed`
       }
       
-      
-      
-
       
     } catch (error) {
       console.log("verify error", error)

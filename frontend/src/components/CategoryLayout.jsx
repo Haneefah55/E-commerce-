@@ -51,13 +51,13 @@ const CategoryLayout = () => {
     {
       href: "sweet",
       name: "Sweets & Candies",
-      image: "/images/cake.jpg",
+      image: "/images/lolli.jpeg",
       
     },
     {
       href: "biscuit",
       name: "Biscuits",
-      image: "/images/cake.jpg",
+      image: "/images/ladyfin.jpeg",
       
     },
     
@@ -94,7 +94,7 @@ const CategoryLayout = () => {
                       className="w-full h-full object-cover transition-transform  rounded-2xl duration-500 ease-out group-hover:scale-110"
                       loading="lazy"
                     />
-                    <div className="absolute bottom-4 left-[50%] translate-y-0 -translate-x-[50%] font-bello font-extralight rounded-3xl w-auto px-5 text-nowrap py-2 bg-pink-200/80 z-30 text-fuchsia-900 transition-transform hover:-translate-y-3">
+                    <div className="absolute bottom-4 left-[50%] translate-y-0 -translate-x-[50%] font-bello font-extralight rounded-3xl w-auto px-5 text-nowrap py-2 bg-pink-200 z-30 text-fuchsia-900 transition-transform hover:-translate-y-3">
                       {category.name}
                     </div>
                   </div>

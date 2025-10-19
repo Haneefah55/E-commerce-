@@ -17,7 +17,7 @@ const HomePage = () =>{
   const { featuredProducts, fetchFeaturedProducts, fetchOfferProducts, offerProducts } = useProductStore()
   //console.log(offerProducts)
   const { getCartItems } = useCartStore()
-
+  console.log("features", featuredProducts)
   const { getCustomersReview, customerReviews } = useReviewStore()
 
   const handleSubscribe = async() =>{
@@ -60,11 +60,11 @@ const HomePage = () =>{
       </section>
     
 
-      <section className=' w-full font-[Merienda] mt-20 '>
+      <section className=' w-full font-[Merienda]  mt-20 flex items-center justify-center'>
         <div className='flex items-center justify-center flex-col relative '>
           
-          <div className='flex flex-col md:flex-row gap-3'>
-            <img src={storyBg} alt='our story' className='w-[280px] md:w-[300px] rounded-lg shadow-lg' />
+          <div className='flex flex-col ml-1 sm:ml-0 md:flex-row gap-3'>
+            <img src={storyBg} alt='our story' className='w-[300px] md:w-[300px] rounded-lg shadow-lg' />
             
             <div className='p-3 w-[300px] md:w-[450px] flex flex-col items-center justify-center text-sm  text-purple-950'>
               <h2 className=' font-semibold font-bello text-xl '>What is it?</h2>
@@ -75,9 +75,7 @@ const HomePage = () =>{
               <p className='mb-3 text-center' >So go ahead, you deserve a <strong>Treat</strong>.</p>
 
             </div>
-          </div>
-            
-
+          </div>            
           
             
           

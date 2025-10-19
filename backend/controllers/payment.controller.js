@@ -35,10 +35,7 @@ export const initializePayment = async(req, res) =>{
     
 
 
-    console.log(user.email)
-    console.log(total)
-    console.log(coupon)
-    console.log(randomCode)
+  
     
     if(coupon){
       await Coupon.findOneAndUpdate({ code: coupon, user: user._id }, { isActive: false })

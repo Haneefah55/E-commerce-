@@ -33,9 +33,10 @@ const Footer = () => {
     if(!comment || !ratings){
         toast.error("comment or rating is missing")
         return
-      }
+    }
+
     try {
-      console.log(comment, ratings)
+      //console.log(comment, ratings)
       if(!user){
         toast.error("Please login to rate product", { id: "login" });
         return
@@ -44,6 +45,9 @@ const Footer = () => {
       await createCustomerReview(comment, ratings)
     } catch (error) {
       console.log(error)
+    } finally {
+      setComment('')
+      setRatings(0)
     }
   }
 

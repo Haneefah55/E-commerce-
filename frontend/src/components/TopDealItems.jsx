@@ -85,7 +85,7 @@ const TopDealItems = ({ offerProducts }) => {
         <h3 className="p-2 text-purple-800 ml-2 font-[Merienda] font-semibold text-md md:text-xl ">Top deals of the month</h3>
         <div className='w-[280px] h-1 mb-5 bg-pink-800 flex' />
         <div className='relative'>
-          <div className='overflow-hidden mx-auto'>
+          <div className='overflow-hidden mx-auto pl-6'>
             <div className='flex gap-6 transition-transform duration-300 ease-in-out'
               style={{ transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)` }}
             
