@@ -123,7 +123,7 @@ export const createProduct = async(req, res) =>{
       stock
     })
 
-    console.log("Product Created Succeefully")
+    //console.log("Product Created Succeefully")
 
     res.status(200).json({ product })
 
