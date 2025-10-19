@@ -122,6 +122,9 @@ const ProductPage = () => {
     } catch (error) {
       console.log(error)
    
+    } finally {
+      setComment('')
+      setRatings(null)
     }
   }
 

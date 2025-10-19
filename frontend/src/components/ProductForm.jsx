@@ -42,6 +42,13 @@ const ProductForm = () =>{
       
     } catch (error) {
       console.log(error)
+    } finally{
+      setName('')
+      setDescription('')
+      setPrice('')
+      setStock('')
+      setCategory('')
+      setImage('')
     }
   }
   
