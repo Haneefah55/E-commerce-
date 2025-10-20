@@ -95,7 +95,9 @@ export const verifyPayment = async(req, res) =>{
       }
     );
 
-    //console.log("verify response", response.data)
+    console.log(process.env.PAYSTACK_SECRET_KEY)
+
+    console.log("verify response", response.data)
     //console.log("status text", response.statusText)
 
 
