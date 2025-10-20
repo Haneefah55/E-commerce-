@@ -97,8 +97,8 @@ export const verifyPayment = async(req, res) =>{
 
     console.log(process.env.PAYSTACK_SECRET_KEY)
 
-    console.log("verify response", response.data)
-    //console.log("status text", response.statusText)
+    //console.log("verify response", response.data)
+    console.log("status", response.status)
 
 
     const products = await Product.find({ _id: {$in: req.user.cartItems } })
@@ -109,7 +109,7 @@ export const verifyPayment = async(req, res) =>{
       return { ...product.toJSON(), quantity: item.quantity }
     })
 
-    if(response.statusText === 'OK') {
+    if(response.status === true) {
       const metadata = response.data.data.metadata
       
       //console.log("metadata", metadata)
