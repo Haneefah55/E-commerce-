@@ -4,7 +4,6 @@ import axios from 'axios'
 
 
 
-
 axios.defaults.withCredentials = true
 
 export const useCartStore = create((set, get) => ({
@@ -223,103 +222,30 @@ export const useCartStore = create((set, get) => ({
       
       const response = await axios.post('/api/payment/initialize', { amount, coupon })
 
-      //console.log("initialize response", response)
+      console.log("initialize response", response)
 
       const data = response.data
       if(!data.reference) throw new Error("no reference returned");
       console.log(data.reference)
 
+      //set({ isLoading: false })
+
+      return data.reference
+
     
-      await get().verifyTransaction(data.reference)
-      set({ isLoading: false })
+      //await get().verifyTransaction(data.reference)
+      
       
 
       
 
 
-
-
-
-
-
-      //2. launch paystack pop up
-
-      //const popup = new PaystackPop()
-/*** 
-      const paystackOption = {
-
-        key: "pk_test_c12db4a5f22fbb4665fdcf3c53003bc9ba8c9f99",
-        email: email,
-        amount: total * 1000,
-        ref: data.reference,
-        currency: 'NGN',
-        onSuccess: async(transaction) =>{
-
-          console.log("payment success", transaction)
-
-          const res = await axios.get(`/api/payment/verify/${transaction.reference}`)
-          console.log(res)
-          set({ isLoading: false })
-
-          if(res.data.success) {
-            
-            window.location.href = "/payment-success"
-          } else {
-
-            window.location.href = "/payment-failed"
-
-          }
-
-
-
-        },
-
-        onCancel: () =>{
-          set({ isLoading: false })
-          console.log("payment cancelled")
-          window.location.href = "/payment-failed"
-        }
-
-      }
-
-      // use window.paystackpop
-      if(window.PaystackPop) {
-        window.PaystackPop.setup(paystackOption).openIframe()
-      } else {
-        throw new Error("Paystack not loaded properly");
-        
-      }
-
-**/
-      
     } catch (error) {
       set({isLoading: false })
       console.log("payment error", error)
     }
   },
 
-  verifyTransaction: async(reference) =>{
-
-    try {
-      const response = await axios.get(`/api/payment/verify/${reference}`)
-
-      console.log("verify response", response.statusText)
-
-      const id = response.data.orderId
-      
- 
-      if(response.statusText === "OK"){
-
-        window.location.href = `${process.env.CLIENT_URL}/purchase-success/${id}`
-        console.log(response.status, response.statusText)
-      }  else{
-        window.location.href = `${process.env.CLIENT_URL}/purchase-failed`
-      }
-      
-      
-    } catch (error) {
-      console.log("verify error", error)
-    }
-  }
+  
 
 }))

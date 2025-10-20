@@ -42,7 +42,7 @@ const CheckoutPage = () => {
                 <h2>{user?.email}</h2>
               </div>
               <div className='flex gap-2'>
-                <h2 >Total:</h2>
+                <h2 >Sub Total:</h2>
                 <h2 className='font-semibold text-xl '>&#8358; {subtotal?.toFixed(2).toLocaleString()}</h2>
               </div>
 

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import StarRatings from 'react-star-ratings';
+import he from 'he'
 import { useEffect } from 'react'
 import { useParams, Link } from 'react-router'
 import bg from '/images/rain.jpg'
@@ -218,7 +219,7 @@ const ProductPage = () => {
 
               <div className='bg-gray-400 h-0.5 w-full mt-5' />
 
-              <p className='mt-4 '>Category: <span className='font-bold text-pink-700'>{product?.category}</span></p>
+              <p className='mt-4 '>Category: <span className='font-bold text-pink-700'>{he.decode(product?.category)}</span></p>
               
 
             </div>

@@ -3,6 +3,7 @@ import Product from '../models/products.model.js'
 import User from '../models/user.model.js'
 import cloudinary from '../utils/cloudinary.js'
 import Review from '../models/review.model.js'
+import he from 'he'
 
 
 
@@ -19,6 +20,28 @@ export const getAllProducts = async(req, res) =>{
   }
   
   
+}
+
+export const getShopProducts = async(req, res) =>{
+  try {
+    const page = parseInt(req.query.page) || 1
+    const limit = 3
+    const skip = (page - 1) * limit
+
+    const total = await Product.countDocuments()
+
+    const product = await Product.find({}).skip(skip).limit(limit)
+
+    res.json({
+      product,
+      currentPage: page,
+      totalPage: Math.ceil(total / limit),
+      totalProducts: total
+    })
+  } catch (error) {
+    console.error("Error in getShopProducts contoller", error.message);
+    res.status(500).json({ message: error.message })
+  }
 }
 
 export const getProduct = async (req, res) =>{
@@ -205,7 +228,9 @@ export const getProductByCategory = async(req, res) =>{
   try {
     const { category } = req.params
     
-    const products = await Product.find({ category })
+    const encodedCatgeory = category.replace(/&/g, "&amp;")
+
+    const products = await Product.find({ category: encodedCatgeory })
     res.json(products)
     
   } catch (error) {

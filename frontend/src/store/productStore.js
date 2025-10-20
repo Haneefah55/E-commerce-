@@ -1,6 +1,7 @@
 
 import { toast } from 'react-hot-toast'
 import { create } from 'zustand'
+import he from 'he'
 import axios from 'axios'
 
 export const useProductStore = create((set) => ({
@@ -167,6 +168,7 @@ export const useProductStore = create((set) => ({
     set({ isLoading: true })
 
     try {
+      //const encodedCatgeory = he.encode(category)
       const response = await axios.get(`/api/product/category/${category}`)
 
       set({ products: response.data, isLoading: false })

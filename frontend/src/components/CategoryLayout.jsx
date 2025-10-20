@@ -49,7 +49,7 @@ const CategoryLayout = () => {
       
     },
     {
-      href: "sweet",
+      href: "sweet & candies",
       name: "Sweets & Candies",
       image: "/images/lolli.jpeg",
       

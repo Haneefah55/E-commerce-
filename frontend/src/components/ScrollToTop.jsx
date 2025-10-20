@@ -7,7 +7,7 @@ const ScrollToTop = () => {
 
   useEffect(() =>  {
 
-    console.log("routes changed to", pathname)
+   // console.log("routes changed to", pathname)
     const scrolldev = document.querySelector('.overflow-auto')
 
     if(scrolldev) {

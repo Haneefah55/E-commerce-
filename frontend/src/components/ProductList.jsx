@@ -1,6 +1,7 @@
 
 import { BadgeCheck, PenSquareIcon, Star, Trash2Icon } from 'lucide-react'
 import React, { useEffect } from 'react'
+import he from 'he'
 import { Link } from 'react-router'
 
 import { useProductStore } from '../store/productStore.js'
@@ -91,8 +92,8 @@ const ProductList = () =>{
                 </td>
 
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm ">
-                    {product.category}
+                  <div className="text-sm capitalize ">
+                    {he.decode(product.category)}
 
                   </div>
 

@@ -4,9 +4,13 @@ import securePay from '/images/paystackimg.png'
 import { useCartStore } from '../store/cartStore.js'
 //import { useAuthStore } from '../store/userStore.js'
 import { useState } from 'react'
-import { Loader } from 'lucide-react'
+import { Loader, X } from 'lucide-react'
+import { useNavigate } from 'react-router'
 //import { useEffect } from 'react'
+import axios from 'axios'
 
+
+axios.defaults.withCredentials = true
 
 const PaymentPage = ({ email }) => {
 
@@ -106,6 +110,10 @@ const PaymentPage = ({ email }) => {
     }
 
   }
+  const navigate = useNavigate()
+  const handleClose = () =>{
+    navigate("/purchase-failed")
+  }
 
 
   const validateForm = () =>{
@@ -165,7 +173,23 @@ const PaymentPage = ({ email }) => {
     console.log("paymentda", paymentData)
 
     try {
-      await initializePayment()
+      const reference  = await initializePayment()
+
+      const response = await axios.get(`/api/payment/verify/${reference}`)
+      
+      console.log("verify response", response.statusText)
+
+      const id = response.data.orderId
+      
+      
+      if(response.statusText === "OK"){
+
+        navigate(`/purchase-success/${id}`)
+        console.log(response.status, response.statusText)
+      }  else{
+        navigate("/purchase-failed")
+
+      }
 
       
     } catch (error) {
@@ -181,10 +205,12 @@ const PaymentPage = ({ email }) => {
 
 
   return (
-    <div className=' flex items-center mt-14 justify-center mx-auto relative '>
+    <div className=' flex items-center mt-14 justify-center z-40 mx-auto relative '>
+      
 
-      <div className=' bg-white w-[300px]  font-[Lato] md:w-[500px] h-auto  shadow-md px-1 md:px-6 py-6 flex flex-col items-center justify-center gap-3'>
-        <div className='flex w-full px-4  items-center justify-between'>
+      <div className=' bg-white w-[300px]  font-[Lato] md:w-[500px] h-auto  shadow-md px-1 md:px-6 py-6 flex flex-col items-center justify-center relative gap-3'>
+        <X className='absolute top-2 right-4 w-7 h-7' onClick={handleClose}/>
+        <div className='flex w-full px-4 mt-5 items-center justify-between'>
           <div className='flex '>
             <img src={payLogo} alt='paystack-logo' className='w-[120px] '/>
 
@@ -198,9 +224,6 @@ const PaymentPage = ({ email }) => {
           </div>
           
         </div>
-        
-
-        
 
         <div className='w-full h-0.5 bg-amber-900' />
         <p className='bg-amber-400 -mt-3 text-amber-950 font-bold uppercase text-xs px-4 py-1'>Test</p>

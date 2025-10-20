@@ -19,13 +19,16 @@ axios.defaults.withCredentials = true
 const ShopPage = () => {
 
 
-  const { products, fetchAllProducts, offerProducts, fetchOfferProducts } = useProductStore()
+  const { offerProducts, fetchOfferProducts } = useProductStore()
   
   const { user } = useAuthStore()
   const { cart } = useCartStore()
   const [show, setShow] = useState(true)
   const [category, setCategory] = useState([])
   const [filter, setFilter] = useState("")
+  const [products, setProducts] = useState([])
+  const [pages, setPages] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
 
   //console.log("filter", filter)
   const navigate = useNavigate()
@@ -42,14 +45,30 @@ const ShopPage = () => {
 
   //console.log(category)
 
-  //console.log(products)
+  console.log("product", products)
+
+
   useEffect(() => {
+
+    const fetchProducts = async() =>{
+      try {
+        const res = await axios.get(`/api/product/shop?page=${pages}`)
+        console.log("res, ", res.data)
+
+        setProducts(res.data.product)
+        setTotalPages(res.data.totalPage)
+      } catch (error) {
+        console.log(error)
+      }
+    }
     
 
-    fetchAllProducts()
+    fetchProducts()
+
+    
   
     
-  }, [fetchAllProducts])
+  }, [pages])
 
   useEffect(() => {
 
@@ -121,7 +140,7 @@ const ShopPage = () => {
 
 {/*       
  */}
-      <section className="mt-12 w-full  px-4  lg:px-12 sm:mx-3 lg:mx-auto flex items-center justify-center   ">
+      <section className="mt-12 w-full  px-4  lg:px-12 sm:mx-3 lg:mx-auto flex  items-center justify-center   ">
         <div className='grid grid-cols-12 gap-4 '>
           <div className='col-span-12 md:col-span-9 space-y-6 '>
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
@@ -133,6 +152,20 @@ const ShopPage = () => {
 
               }
             </div>
+
+            <div className=' flex justify-center  gap-2 mt-5'>
+              {[...Array(totalPages)].map((_, i) =>(
+                <button key={i}
+                  onClick={() => setPages(i + 1)}
+                  className={`px-3 py-1 hover:bg-pink-300 border-2 text-white  ${pages === i + 1 ? "bg-pink-500 border-pink-800" : "bg-gray-400  border-gray-600"}`}
+                
+                >
+                {i + 1}
+
+                </button>
+              ))}
+            </div>
+
 
             
 
@@ -225,10 +258,13 @@ const ShopPage = () => {
         </div>
 
         
+        
 
 
 
       </section>
+
+      
 
       <TopDealItems offerProducts={offerProducts}/>
 

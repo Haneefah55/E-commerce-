@@ -78,7 +78,7 @@ export const verifyPayment = async(req, res) =>{
     const { reference } = req.params
 
     if(!reference) {
-      console.log("no reference")
+      //console.log("no reference")
       res.json({ message: "no reference"})
     }
     
@@ -95,8 +95,8 @@ export const verifyPayment = async(req, res) =>{
       }
     );
 
-    console.log("verify response", response.data)
-    console.log("status text", response.statusText)
+    //console.log("verify response", response.data)
+    //console.log("status text", response.statusText)
 
 
     const products = await Product.find({ _id: {$in: req.user.cartItems } })
@@ -110,12 +110,12 @@ export const verifyPayment = async(req, res) =>{
     if(response.statusText === 'OK') {
       const metadata = response.data.data.metadata
       
-      console.log("metadata", metadata)
+      //console.log("metadata", metadata)
       //delete coupon code
      
       
       // create a new order
-      console.log("cart items", cartItems)
+      //console.log("cart items", cartItems)
 
 
       const newOrder = new Order({
@@ -136,7 +136,7 @@ export const verifyPayment = async(req, res) =>{
       })
       
       await newOrder.save()
-      console.log("new order", newOrder)
+     // console.log("new order", newOrder)
       res.status(200).json({
         success: true,
         message: "Payment successful, order created",

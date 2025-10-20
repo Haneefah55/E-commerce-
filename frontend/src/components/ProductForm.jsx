@@ -13,7 +13,7 @@ const ProductForm = () =>{
 
   //const isLoading = false
 
-  const categories = ["cake", "cupcake", "doughnut", "yoghurt", "ice-cream", "chocolate", "macaron", "sweet & candy", "Biscuits"]
+  const categories = ["cake", "cupcake", "doughnut", "yoghurt", "ice-cream", "chocolate", "macaron", "sweet & candie", "biscuit"]
   
   const { createProduct, isLoading } = useProductStore()
 
@@ -122,7 +122,7 @@ const ProductForm = () =>{
         <div className="flex justify-center self-start">
           <input type="file"
             id="image"
-            required
+          
             className="sr-only"
             accept="image/*"
             onChange={handleImageUploade}
