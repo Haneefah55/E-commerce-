@@ -13,7 +13,7 @@ const ProductForm = () =>{
 
   //const isLoading = false
 
-  const categories = ["cake", "cupcake", "doughnut", "yoghurt", "ice-cream", "chocolate", "macaron", "sweet & candie", "biscuit"]
+  const categories = ["cake", "cupcake", "doughnut", "yoghurt", "ice-cream", "chocolate", "macaron", "sweet & candy", "biscuit"]
   
   const { createProduct, isLoading } = useProductStore()
 

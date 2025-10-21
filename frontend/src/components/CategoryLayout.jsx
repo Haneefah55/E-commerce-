@@ -49,8 +49,8 @@ const CategoryLayout = () => {
       
     },
     {
-      href: "sweet & candies",
-      name: "Sweets & Candies",
+      href: "sweet & candy",
+      name: "Sweets & Candy",
       image: "/images/lolli.jpeg",
       
     },
