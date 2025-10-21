@@ -177,15 +177,15 @@ const PaymentPage = ({ email }) => {
 
       const response = await axios.get(`/api/payment/verify/${reference}`)
       
-      console.log("verify response", response.statusText)
+      console.log("verify response", response)
 
       const id = response.data.orderId
       
       
-      if(response.statusText === "OK"){
+      if(response.status === 200){
 
         navigate(`/purchase-success/${id}`)
-        console.log(response.status, response.statusText)
+        //console.log(response.status, response.statusText)
       }  else{
         navigate("/purchase-failed")
 

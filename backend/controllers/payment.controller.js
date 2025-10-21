@@ -29,7 +29,7 @@ export const initializePayment = async(req, res) =>{
 
     const user = req.user
 
-    const total = amount * 100
+    const total = Math.round(amount * 100)
 
     const randomCode = generateRandomCode()
     
@@ -59,7 +59,7 @@ export const initializePayment = async(req, res) =>{
 
 
 
-    console.log(response.data)
+   // console.log("response init", response)
     res.json(response.data)
   } catch (error) {
     console.error("Error in initializePayment contoller", error.message);
@@ -95,10 +95,11 @@ export const verifyPayment = async(req, res) =>{
       }
     );
 
-    console.log(process.env.PAYSTACK_SECRET_KEY)
+    //console.log("secret key", process.env.PAYSTACK_SECRET_KEY)
 
-    //console.log("verify response", response.data)
-    console.log("status", response.status)
+    console.log("verify data", response.data)
+    console.log("success", response.data.success)
+    console.log("refre", reference)
 
 
     const products = await Product.find({ _id: {$in: req.user.cartItems } })
@@ -109,7 +110,7 @@ export const verifyPayment = async(req, res) =>{
       return { ...product.toJSON(), quantity: item.quantity }
     })
 
-    if(response.status === true) {
+    if(response.status === 200) {
       const metadata = response.data.data.metadata
       
       //console.log("metadata", metadata)
@@ -147,7 +148,7 @@ export const verifyPayment = async(req, res) =>{
         
       })
     } else {
-      res.status(200).json({
+      res.json({
         success: false,
         message: "Payment cancelled, order not created",
       })

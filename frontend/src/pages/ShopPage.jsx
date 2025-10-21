@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ShopHero from '../components/ShopHero'
 import ProductCard from '../components/ProductCard.jsx'
+import he from 'he'
 
 import { useEffect } from 'react'
 
@@ -198,7 +199,7 @@ const ShopPage = () => {
                 {category?.map((item) => (
                   <li key={item._id} className='odd:bg-pink-200 relative px-2 py-1 rounded-full w-full even:bg-gray-300 '>
                     <Link to={`/category/${item._id}`}>
-                      <p>{item?._id}</p>
+                      <p>{he.decode(item?._id)}</p>
                       <p className='w-7 h-7 text-white text-sm flex items-center justify-center bg-purple-800 rounded-full absolute top-0.5 right-1'>{item?.count}</p>
                     
                     

@@ -18,7 +18,7 @@ export const addToCart = async(req, res) =>{
     }
     
     await user.save()
-    console.log("produc added to cart", user.cartItems)
+    //console.log("produc added to cart", user.cartItems)
     res.json(user.cartItems)
     
   } catch (error) {
@@ -118,11 +118,11 @@ export const clearCart = async(req, res) =>{
 
 
     const result = await Product.bulkWrite(bulkOperation)
-    console.log(`${result.modifiedCount}, product quantity updated`)
+   // console.log(`${result.modifiedCount}, product quantity updated`)
 
-    user.cartItems = []
+    //user.cartItems = []
 
-    await user.save()
+    //await user.save()
     console.log("cart items deleted successfully")
     res.json({ message: "stock updated, cart items deleted successfully" })
 

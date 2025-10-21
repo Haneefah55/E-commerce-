@@ -226,7 +226,7 @@ export const useCartStore = create((set, get) => ({
 
       const data = response.data
       if(!data.reference) throw new Error("no reference returned");
-      console.log(data.reference)
+      console.log("data refrence", data.reference)
 
       set({ isLoading: false })
 
