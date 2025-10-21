@@ -133,7 +133,7 @@ const ProductPage = () => {
 
     const fetchProduct = async() =>{
       const response = await axios.get(`/api/product/${id}`)
-      //console.log("fetch product response", response.data)
+      console.log("fetch product response", response.data)
 
        setProduct(response.data)
     }
@@ -155,6 +155,9 @@ const ProductPage = () => {
    
 
   }, [product])
+
+  // const encodedCatgeory =  product?.category?.replace(/&/g, "&amp;")
+  // console.log("category", product?.category)
 
 
   return (
@@ -219,7 +222,7 @@ const ProductPage = () => {
 
               <div className='bg-gray-400 h-0.5 w-full mt-5' />
 
-              <p className='mt-4 '>Category: <span className='font-bold text-pink-700'>{he.decode(product?.category)}</span></p>
+              <p className='mt-4 '>Category: <span className='font-bold text-pink-700'>{product?.category}</span></p>
               
 
             </div>

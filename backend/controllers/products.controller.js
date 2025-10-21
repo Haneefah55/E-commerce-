@@ -401,46 +401,55 @@ export const getProductReview = async(req, res) =>{
       { review: 1, _id: 0 }
     )
 
-    const totalReviews = await Product.aggregate([
-      {
-        $match: {
-          _id: mongoose.Types.ObjectId.createFromHexString(id)
+    if(productReviews){
+
+      const totalReviews = await Product.aggregate([
+        {
+          $match: {
+            _id: mongoose.Types.ObjectId.createFromHexString(id)
+          }
+        }, 
+        
+        {
+          $project: {
+            name: 1,
+            review: { $size: "$review" }, 
+            _id: 0
+          }
+
         }
-      }, 
-      
-      {
-        $project: {
-          name: 1,
-          review: { $size: "$review" }, 
-          _id: 0
+      ])
+
+      const { review } = totalReviews[0] ||  0 
+
+
+      const productRatings = await Product.aggregate([
+        {
+          $match: {
+            _id: mongoose.Types.ObjectId.createFromHexString(id)
+          }
+        }, 
+        
+        {
+          $project: {
+            _id: 0,
+            totalRatings: { $size: "$review" }, 
+            averageRating: { $avg: "$review.ratings" }
+          }
+
         }
+      ])
 
-      }
-    ])
+      const { totalRatings, averageRating } = productRatings[0] || { totalRatings: 0, averageRating: 0 }
 
-    const { review } = totalReviews[0] ||  0 
+      res.json({ totalRatings, averageRating, review, productReviews  })
+    } else {
+      res.status(400).json({ message: "NO review found"})
+    }
 
+    
 
-    const productRatings = await Product.aggregate([
-      {
-        $match: {
-          _id: mongoose.Types.ObjectId.createFromHexString(id)
-        }
-      }, 
-      
-      {
-        $project: {
-          _id: 0,
-          totalRatings: { $size: "$review" }, 
-          averageRating: { $avg: "$review.ratings" }
-        }
-
-      }
-    ])
-
-    const { totalRatings, averageRating } = productRatings[0] || { totalRatings: 0, averageRating: 0 }
-
-    res.json({ totalRatings, averageRating, review, productReviews  })
+    
   } catch (error) {
     console.error("Error in getProductReview contoller", error.message);
     res.status(500).json({ message: error.message })
