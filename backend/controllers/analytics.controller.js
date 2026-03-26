@@ -34,6 +34,7 @@ export const getAnalyticsData = async() =>{
 export const getDailySalesData = async(startDate, endDate) =>{
   
   
+  
   try {
     
     const dailySalesData = await Order.aggregate([

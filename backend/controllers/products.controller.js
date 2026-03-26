@@ -130,6 +130,8 @@ export const createProduct = async(req, res) =>{
   
   try {
     const { name, description, price, image, category, stock } = req.body
+
+    
   
     let cloudinaryResponse = null
     if(image){

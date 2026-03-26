@@ -15,12 +15,12 @@ async function seedAdmin() {
 
     // check if admin already exists
 
-    
+    const adminpass = process.env.PASS
     // create new admin
     const admin = new User({
       name: "Super Admin",
       email: adminEmail,
-      password: "admin9090", // will be hashed by pre-save hook
+      password: adminpass, // will be hashed by pre-save hook
       role: "admin",
     });
 
