@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-//import { redis } from '../utils/redis.js'
+import { redis } from '../utils/redis.js'
 
 export const generateToken = (userId) =>{
   
@@ -12,11 +12,11 @@ export const generateToken = (userId) =>{
   
   return { accessToken, refreshToken }
 }
-/*** 
+
 export const storeRefreshToken = async(userId, token) =>{
   await redis.set(`refreshToken: ${userId}`, token, "EX", 7 * 24 * 60 * 60)
 }
-**/
+
 export const setCookies = (res, accessToken, refreshToken) =>{
   
   res.cookie("access_token", accessToken, {
@@ -25,17 +25,19 @@ export const setCookies = (res, accessToken, refreshToken) =>{
     sameSite: "strict",
     maxAge: 15 * 60 * 1000,
   })
-  
-  res.cookie("refresh_token", refreshToken, {
+
+	
+res.cookie("refresh_token", refreshToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
     maxAge: 7 * 24 * 60 * 60 * 1000,
   })
-  
 
 }
-/** 
+
+
+
 export const delCookies = async(req) =>{
   
   const refreshToken = req.cookies.refresh_token
@@ -45,23 +47,26 @@ export const delCookies = async(req) =>{
       //await redis.del(`refreshToken: ${decode.userId}`)
     }
 } 
-**/
+
+
 export const getStoredToken = async(req, res) =>{
-  const refreshToken = req.cookies.refresh_token
-  
-    if(!refreshToken){
-      throw new Error("No refresh token");
-      
+	
+    const refreshToken = req.cookies?.refreshToken
+
+    if (!refreshToken) {
+      return res.status(401).json({ message: "Refresh token is required" });
     }
+
     
-  const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
   
-  /** const storedToken = await redis.get(`refreshToken: ${decoded.userId}`)
+  const storedToken = await redis.get(`refreshToken: ${decoded.userId}`)
   
   if(storedToken !== refreshToken){
-    return res.status(400).json({ message: "Invalid refresh token" })
+    return res.status(401).json({ message: "Invalid refresh token" })
   }
-  **/
+  
  
   const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
   
@@ -69,3 +74,10 @@ export const getStoredToken = async(req, res) =>{
   
   
 }
+
+
+/***
+
+
+	
+**/

@@ -1,7 +1,7 @@
 import User from '../models/user.model.js'
 import Order from '../models/order.model.js'
 import Product from '../models/products.model.js'
-import { generateToken, setCookies, getStoredToken } from '../utils/generateToken.js'
+import { generateToken, setCookies, getStoredToken, storeRefreshToken, delCookies } from '../utils/generateToken.js'
 
 
 
@@ -78,7 +78,7 @@ export const login = async(req, res) =>{
       
       const { accessToken, refreshToken } = generateToken(user._id)
       
-      //await storeRefreshToken(user._id, refreshToken)
+      await storeRefreshToken(user._id, refreshToken)
       
       setCookies(res, accessToken, refreshToken)
   
@@ -221,10 +221,10 @@ export const deleteUser = async(req, res) =>{
 
 export const logout = async(req, res) =>{
   try {
-    //await delCookies(req)
+    await delCookies(req)
     
     res.clearCookie("access_token")
-    res.clearCookie("refresh_token")
+  
     
     console.log("user logout successfully")
     res.status(200).json({ message: "user logout successfully" })
@@ -255,7 +255,7 @@ export const refreshToken = async(req, res) =>{
   } catch (error) {
     
     console.error("Error in refresh token contoller", error.message);
-    res.status(500).json({ message: error.message })
+    res.status(401).json({ message: error.message })
   }
 }
 
